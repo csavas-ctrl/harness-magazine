@@ -1,0 +1,9 @@
+name = "harness-publisher"
+version = "1.0.0"
+description = "Publish and update the HARNESS magazine to Cloudflare Pages via GitHub"
+author = "Grid Dynamics"
+
+[[skills]]
+name = "publish-harness"
+path = ".claude/skills/publish-harness.md"
+trigger = "publish harness|deploy harness|update the site|push to cloudflare|push harness"

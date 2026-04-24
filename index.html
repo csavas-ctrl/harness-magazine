@@ -1,0 +1,3558 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>HARNESS — The Definitive Reading List for Agent Engineers</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,400&family=JetBrains+Mono:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --ink: #0D1B2A;
+    --cream: #F8FAFC;
+    --parchment: #EEF2F7;
+    --rust: #F29100;
+    --gold: #00B4D8;
+    --slate: #4A5568;
+    --muted: #9CA3AF;
+    --highlight: #FFF3EE;
+    --deep-green: #1A3A5C;
+    --blush: #FFE8DE;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  html { font-size: 16px; scroll-behavior: smooth; }
+
+  body {
+    background: var(--cream);
+    color: var(--ink);
+    font-family: 'Inter', system-ui, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    overflow-x: hidden;
+  }
+
+  /* === TEXTURE OVERLAY === */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.03'/%3E%3C/svg%3E");
+    pointer-events: none;
+    z-index: 9999;
+  }
+
+  /* === MASTHEAD === */
+  .masthead {
+    padding: 3rem 2rem 1rem;
+    text-align: center;
+    border-bottom: 1px solid rgba(0,0,0,0.1);
+    position: relative;
+    overflow: hidden;
+    background: var(--cream);
+  }
+
+  .masthead::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 4px;
+    background: var(--rust);
+  }
+
+  .masthead::after {
+    content: '';
+    position: absolute;
+    bottom: -1px;
+    left: 0;
+    right: 0;
+    height: 1px;
+    background: rgba(0,0,0,0.1);
+  }
+
+  .masthead-issue {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.65rem;
+    letter-spacing: 0.4em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 1rem;
+  }
+
+  .masthead-title {
+    font-family: 'Inter', system-ui, sans-serif;
+    font-size: clamp(4rem, 12vw, 9rem);
+    font-weight: 900;
+    letter-spacing: -0.04em;
+    line-height: 0.85;
+    color: var(--ink);
+    position: relative;
+    display: inline-block;
+    text-transform: uppercase;
+  }
+
+  .masthead-title .accent {
+    color: var(--rust);
+    font-style: normal;
+  }
+
+  .masthead-subtitle {
+    font-family: 'Inter', system-ui, sans-serif;
+    font-size: 0.8rem;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    color: var(--slate);
+    margin-top: 1.2rem;
+    font-weight: 500;
+  }
+
+  .masthead-rule {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin-top: 1.5rem;
+    justify-content: center;
+  }
+
+  .masthead-rule span {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.6rem;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+
+  .masthead-rule::before,
+  .masthead-rule::after {
+    content: '';
+    width: 60px;
+    height: 1px;
+    background: var(--muted);
+  }
+
+  /* === NAV BAR === */
+  .nav-bar {
+    display: flex;
+    justify-content: center;
+    gap: 2.5rem;
+    padding: 0.8rem 2rem;
+    border-bottom: 1px solid rgba(0,0,0,0.1);
+    font-family: 'Inter', system-ui, sans-serif;
+    font-size: 0.7rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--slate);
+    font-weight: 500;
+    flex-wrap: wrap;
+  }
+
+  .nav-bar a {
+    color: var(--slate);
+    text-decoration: none;
+    transition: color 0.3s;
+  }
+
+  .nav-bar a:hover { color: var(--rust); }
+
+  /* === HERO SECTION === */
+  .hero {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    min-height: 80vh;
+    border-bottom: 3px solid var(--ink);
+  }
+
+  .hero-left {
+    background: var(--ink);
+    color: var(--cream);
+    padding: 4rem 3rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .hero-left::before {
+    content: '';
+    position: absolute;
+    width: 340px;
+    height: 340px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(240,90,40,0.15) 0%, transparent 70%);
+    top: -5rem;
+    right: -3rem;
+    pointer-events: none;
+  }
+
+  .hero-tag {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.65rem;
+    letter-spacing: 0.35em;
+    text-transform: uppercase;
+    color: var(--rust);
+    margin-bottom: 1.5rem;
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+  }
+
+  .hero-tag::before {
+    content: '';
+    width: 28px;
+    height: 2px;
+    background: var(--rust);
+  }
+
+  .hero-headline {
+    font-family: 'Inter', system-ui, sans-serif;
+    font-size: clamp(2.4rem, 4vw, 3.6rem);
+    font-weight: 700;
+    line-height: 1.1;
+    margin-bottom: 1.5rem;
+    max-width: 500px;
+  }
+
+  .hero-headline em {
+    font-style: normal;
+    color: var(--rust);
+    font-weight: 800;
+  }
+
+  .hero-excerpt {
+    font-size: 1.05rem;
+    line-height: 1.7;
+    color: rgba(245,240,232,0.7);
+    max-width: 440px;
+    font-weight: 300;
+  }
+
+  .hero-meta {
+    margin-top: 2.5rem;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.6rem;
+    letter-spacing: 0.15em;
+    color: rgba(245,240,232,0.4);
+    text-transform: uppercase;
+  }
+
+  .hero-right {
+    background: var(--parchment);
+    padding: 3rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    position: relative;
+  }
+
+  .hero-right::after {
+    content: 'Agent = Model + Harness';
+    position: absolute;
+    bottom: 2rem;
+    right: 2rem;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.65rem;
+    letter-spacing: 0.2em;
+    color: var(--muted);
+    text-transform: uppercase;
+    opacity: 0.6;
+  }
+
+  .hero-card {
+    background: white;
+    padding: 2.5rem;
+    border: 1px solid rgba(0,0,0,0.08);
+    box-shadow: 0 1px 3px rgba(0,0,0,0.04);
+    position: relative;
+    transition: transform 0.4s ease;
+  }
+
+  .hero-card:hover { transform: translateY(-2px); }
+
+  .hero-card + .hero-card { margin-top: 1.2rem; }
+
+  .card-number {
+    position: absolute;
+    top: -0.6rem;
+    left: 1.5rem;
+    font-family: 'Inter', system-ui, sans-serif;
+    font-size: 1.2rem;
+    font-weight: 900;
+    color: var(--rust);
+    background: var(--parchment);
+    padding: 0 0.5rem;
+  }
+
+  .card-source {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.55rem;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 0.6rem;
+  }
+
+  .card-title {
+    font-family: 'Inter', system-ui, sans-serif;
+    font-size: 1.2rem;
+    font-weight: 700;
+    line-height: 1.3;
+    margin-bottom: 0.5rem;
+  }
+
+  .card-title a {
+    color: var(--ink);
+    text-decoration: none;
+    background-image: linear-gradient(var(--rust), var(--rust));
+    background-size: 0% 2px;
+    background-position: 0 100%;
+    background-repeat: no-repeat;
+    transition: background-size 0.4s ease;
+  }
+
+  .card-title a:hover { background-size: 100% 2px; }
+
+  .card-desc {
+    font-size: 0.88rem;
+    line-height: 1.6;
+    color: var(--slate);
+    font-weight: 300;
+  }
+
+  /* === SECTION HEADERS === */
+  .section-header {
+    padding: 3rem 3rem 1.5rem;
+    border-bottom: 1px solid rgba(0,0,0,0.1);
+    display: flex;
+    align-items: baseline;
+    gap: 1.5rem;
+  }
+
+  .section-number {
+    font-family: 'Inter', system-ui, sans-serif;
+    font-size: 4rem;
+    font-weight: 900;
+    color: var(--rust);
+    line-height: 1;
+    opacity: 0.3;
+  }
+
+  .section-label {
+    font-family: 'Inter', system-ui, sans-serif;
+    font-size: 0.7rem;
+    letter-spacing: 0.35em;
+    text-transform: uppercase;
+    color: var(--slate);
+    font-weight: 600;
+  }
+
+  .section-title {
+    font-family: 'Inter', system-ui, sans-serif;
+    font-size: 2rem;
+    font-weight: 800;
+    line-height: 1.1;
+    letter-spacing: -0.02em;
+  }
+
+  /* === EDITORIAL GRID === */
+  .editorial-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    border-bottom: 3px solid var(--ink);
+  }
+
+  .editorial-cell {
+    padding: 2.5rem;
+    border-right: 1px solid rgba(0,0,0,0.1);
+    position: relative;
+    transition: background 0.3s ease;
+  }
+
+  .editorial-cell:last-child { border-right: none; }
+
+  .editorial-cell:hover { background: rgba(196,80,26,0.03); }
+
+  .cell-icon {
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 1.5rem;
+    font-size: 1.2rem;
+  }
+
+  .cell-icon.green { background: var(--deep-green); color: var(--cream); }
+  .cell-icon.rust { background: var(--rust); color: var(--cream); }
+  .cell-icon.gold { background: var(--gold); color: white; }
+
+  .cell-source {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.55rem;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 0.8rem;
+  }
+
+  .cell-title {
+    font-family: 'Inter', system-ui, sans-serif;
+    font-size: 1.3rem;
+    font-weight: 700;
+    line-height: 1.25;
+    margin-bottom: 0.8rem;
+  }
+
+  .cell-title a {
+    color: var(--ink);
+    text-decoration: none;
+    transition: color 0.3s;
+  }
+
+  .cell-title a:hover { color: var(--rust); }
+
+  .cell-desc {
+    font-size: 0.88rem;
+    line-height: 1.65;
+    color: var(--slate);
+    font-weight: 300;
+  }
+
+  .cell-read-more {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    margin-top: 1.2rem;
+    font-family: 'Inter', system-ui, sans-serif;
+    font-size: 0.7rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--rust);
+    text-decoration: none;
+    font-weight: 600;
+    transition: gap 0.3s;
+  }
+
+  .cell-read-more:hover { gap: 0.8rem; }
+
+  .cell-read-more::after { content: '→'; }
+
+  /* === PULLQUOTE BANNER === */
+  .pullquote-banner {
+    background: var(--ink);
+    color: var(--cream);
+    padding: 4rem 3rem;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .pullquote-banner::before {
+    content: '"';
+    position: absolute;
+    font-family: 'Inter', system-ui, sans-serif;
+    font-size: 20rem;
+    top: -3rem;
+    left: 50%;
+    transform: translateX(-50%);
+    opacity: 0.05;
+    line-height: 1;
+  }
+
+  .pullquote-text {
+    font-family: 'Inter', system-ui, sans-serif;
+    font-size: clamp(1.5rem, 3.5vw, 2.4rem);
+    font-style: normal;
+    font-weight: 700;
+    line-height: 1.3;
+    letter-spacing: -0.02em;
+    max-width: 750px;
+    margin: 0 auto;
+  }
+
+  .pullquote-text em { color: var(--rust); font-style: normal; font-weight: 700; }
+
+  .pullquote-attr {
+    margin-top: 1.5rem;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.6rem;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: rgba(245,240,232,0.4);
+  }
+
+  /* === TWO-COL FEATURE === */
+  .feature-split {
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    border-bottom: 3px solid var(--ink);
+  }
+
+  .feature-main {
+    padding: 3rem;
+    border-right: 1px solid rgba(0,0,0,0.1);
+  }
+
+  .feature-sidebar {
+    background: var(--parchment);
+    padding: 2.5rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+  }
+
+  .sidebar-item {
+    padding-bottom: 1.5rem;
+    border-bottom: 1px solid rgba(0,0,0,0.08);
+  }
+
+  .sidebar-item:last-child { border-bottom: none; padding-bottom: 0; }
+
+  .sidebar-tag {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.55rem;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: var(--rust);
+    margin-bottom: 0.5rem;
+  }
+
+  .sidebar-title {
+    font-family: 'Inter', system-ui, sans-serif;
+    font-size: 1.05rem;
+    font-weight: 700;
+    line-height: 1.3;
+    margin-bottom: 0.4rem;
+  }
+
+  .sidebar-title a {
+    color: var(--ink);
+    text-decoration: none;
+    transition: color 0.3s;
+  }
+
+  .sidebar-title a:hover { color: var(--rust); }
+
+  .sidebar-desc {
+    font-size: 0.82rem;
+    line-height: 1.55;
+    color: var(--slate);
+    font-weight: 300;
+  }
+
+  /* Feature article cards */
+  .feature-article {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: 2rem;
+    align-items: start;
+  }
+
+  .feature-article + .feature-article {
+    margin-top: 2.5rem;
+    padding-top: 2.5rem;
+    border-top: 1px solid rgba(0,0,0,0.08);
+  }
+
+  .feature-num {
+    font-family: 'Inter', system-ui, sans-serif;
+    font-size: 3.5rem;
+    font-weight: 900;
+    color: var(--rust);
+    opacity: 0.15;
+    line-height: 1;
+    min-width: 60px;
+    text-align: center;
+  }
+
+  .feature-content {}
+
+  .feature-source {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.55rem;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 0.5rem;
+  }
+
+  .feature-title {
+    font-family: 'Inter', system-ui, sans-serif;
+    font-size: 1.4rem;
+    font-weight: 700;
+    line-height: 1.25;
+    margin-bottom: 0.6rem;
+  }
+
+  .feature-title a {
+    color: var(--ink);
+    text-decoration: none;
+    background-image: linear-gradient(var(--rust), var(--rust));
+    background-size: 0% 2px;
+    background-position: 0 100%;
+    background-repeat: no-repeat;
+    transition: background-size 0.4s ease;
+  }
+
+  .feature-title a:hover { background-size: 100% 2px; }
+
+  .feature-desc {
+    font-size: 0.92rem;
+    line-height: 1.7;
+    color: var(--slate);
+    font-weight: 300;
+  }
+
+  /* === ARCHITECTURE REFERENCE === */
+  .arch-section {
+    border-bottom: 3px solid var(--ink);
+    background: var(--cream);
+  }
+
+  .arch-intro {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    border-bottom: 1px solid rgba(0,0,0,0.1);
+  }
+
+  .arch-intro-left {
+    padding: 3rem;
+    border-right: 1px solid rgba(0,0,0,0.1);
+  }
+
+  .arch-intro-right {
+    padding: 3rem;
+    display: flex;
+    align-items: center;
+  }
+
+  .arch-intro-text {
+    font-size: 1.05rem;
+    line-height: 1.75;
+    color: var(--slate);
+    font-weight: 300;
+  }
+
+  .arch-intro-text strong {
+    color: var(--ink);
+    font-weight: 600;
+  }
+
+  .arch-diagram-wrap {
+    padding: 3rem;
+    display: flex;
+    justify-content: center;
+    overflow-x: auto;
+  }
+
+  .arch-diagram {
+    width: 100%;
+    max-width: 960px;
+  }
+
+  /* Diagram layer rows */
+  .arch-layer {
+    display: flex;
+    align-items: stretch;
+    margin-bottom: 2px;
+    position: relative;
+  }
+
+  .arch-layer-label {
+    width: 160px;
+    min-width: 160px;
+    padding: 1rem 1.2rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    border-right: 2px solid rgba(255,255,255,0.3);
+  }
+
+  .arch-layer-label .layer-name {
+    font-family: 'Inter', system-ui, sans-serif;
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: white;
+  }
+
+  .arch-layer-label .layer-sub {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.5rem;
+    color: rgba(255,255,255,0.6);
+    margin-top: 0.15rem;
+    letter-spacing: 0.05em;
+  }
+
+  .arch-layer-content {
+    flex: 1;
+    display: flex;
+    gap: 2px;
+    padding: 2px 0 2px 2px;
+  }
+
+  .arch-block {
+    flex: 1;
+    padding: 0.9rem 1rem;
+    background: rgba(255,255,255,0.12);
+    border: 1px solid rgba(255,255,255,0.08);
+    transition: background 0.3s, transform 0.2s;
+    cursor: default;
+    position: relative;
+  }
+
+  .arch-block:hover {
+    background: rgba(255,255,255,0.2);
+    transform: translateY(-1px);
+    z-index: 2;
+  }
+
+  .arch-block .block-title {
+    font-family: 'Inter', system-ui, sans-serif;
+    font-size: 0.7rem;
+    font-weight: 600;
+    color: white;
+    margin-bottom: 0.2rem;
+  }
+
+  .arch-block .block-detail {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.5rem;
+    color: rgba(255,255,255,0.55);
+    line-height: 1.4;
+  }
+
+  /* Layer color coding */
+  .layer-user        { background: #5a4a3a; }
+  .layer-guardrails  { background: var(--rust); }
+  .layer-orchestrate { background: #3a2a1a; }
+  .layer-context     { background: var(--deep-green); }
+  .layer-tools       { background: #2a3a5a; }
+  .layer-observe     { background: #4a3a5a; }
+  .layer-persist     { background: var(--slate); }
+
+  /* Connector arrows between layers */
+  .arch-connector {
+    display: flex;
+    justify-content: center;
+    padding: 0.3rem 0;
+  }
+
+  .arch-connector svg {
+    opacity: 0.25;
+  }
+
+  /* Full-width span block */
+  .arch-block.full-span {
+    flex: none;
+    width: 100%;
+  }
+
+  /* Architecture legend */
+  .arch-legend {
+    display: flex;
+    justify-content: center;
+    gap: 1.5rem;
+    padding: 1.5rem 3rem;
+    flex-wrap: wrap;
+    border-top: 1px solid rgba(0,0,0,0.08);
+  }
+
+  .arch-legend-item {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.55rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+
+  .arch-legend-swatch {
+    width: 12px;
+    height: 12px;
+    border-radius: 2px;
+  }
+
+  .arch-note {
+    text-align: center;
+    padding: 0 3rem 2rem;
+    font-family: 'Inter', system-ui, sans-serif;
+    font-size: 0.82rem;
+    color: var(--muted);
+    
+    max-width: 600px;
+    margin: 0 auto;
+    line-height: 1.6;
+  }
+
+  @media (max-width: 900px) {
+    .arch-intro { grid-template-columns: 1fr; }
+    .arch-intro-left { border-right: none; border-bottom: 1px solid rgba(0,0,0,0.1); }
+    .arch-layer { flex-direction: column; }
+    .arch-layer-label { width: 100%; min-width: unset; border-right: none; border-bottom: 2px solid rgba(255,255,255,0.15); }
+    .arch-layer-content { flex-wrap: wrap; }
+  }
+
+  @media (max-width: 600px) {
+    .arch-diagram-wrap { padding: 1.5rem 0.8rem; }
+    .arch-intro-left, .arch-intro-right { padding: 1.8rem 1.2rem; }
+  }
+
+  /* === TEMPORAL DEEP-DIVE SPREAD === */
+  .temporal-spread {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    border-bottom: 3px solid var(--ink);
+    min-height: 70vh;
+  }
+
+  .temporal-editorial {
+    background: var(--ink);
+    color: var(--cream);
+    padding: 3.5rem;
+    position: relative;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+
+  .temporal-editorial::before {
+    content: '∞';
+    position: absolute;
+    font-family: 'Inter', system-ui, sans-serif;
+    font-size: 22rem;
+    opacity: 0.06;
+    bottom: -3rem;
+    right: -1rem;
+    line-height: 1;
+    color: var(--cream);
+  }
+
+  .temporal-kicker {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.6rem;
+    letter-spacing: 0.4em;
+    text-transform: uppercase;
+    color: rgba(245,240,232,0.5);
+    margin-bottom: 1.5rem;
+    display: flex;
+    align-items: center;
+    gap: 0.8rem;
+  }
+
+  .temporal-kicker::before {
+    content: '';
+    width: 24px;
+    height: 2px;
+    background: var(--gold);
+  }
+
+  .temporal-headline {
+    font-family: 'Inter', system-ui, sans-serif;
+    font-size: clamp(2rem, 3.5vw, 3rem);
+    font-weight: 700;
+    line-height: 1.1;
+    margin-bottom: 1.5rem;
+  }
+
+  .temporal-headline em {
+    
+    color: var(--gold);
+  }
+
+  .temporal-body {
+    font-size: 0.95rem;
+    line-height: 1.75;
+    color: rgba(245,240,232,0.75);
+    font-weight: 300;
+    max-width: 480px;
+  }
+
+  .temporal-body strong {
+    color: var(--cream);
+    font-weight: 600;
+  }
+
+  .temporal-pillars {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.2rem;
+    margin-top: 2rem;
+  }
+
+  .temporal-pillar {
+    background: rgba(245,240,232,0.06);
+    border: 1px solid rgba(245,240,232,0.1);
+    padding: 1.2rem;
+    transition: background 0.3s;
+  }
+
+  .temporal-pillar:hover {
+    background: rgba(245,240,232,0.1);
+  }
+
+  .pillar-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.55rem;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 0.4rem;
+  }
+
+  .pillar-text {
+    font-size: 0.8rem;
+    line-height: 1.5;
+    color: rgba(245,240,232,0.65);
+    font-weight: 300;
+  }
+
+  .temporal-articles {
+    background: var(--cream);
+    padding: 3.5rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+  }
+
+  .temporal-article-card {
+    padding: 1.8rem 0;
+    border-bottom: 1px solid rgba(0,0,0,0.08);
+    position: relative;
+    transition: padding-left 0.3s ease;
+  }
+
+  .temporal-article-card:first-child { padding-top: 0; }
+  .temporal-article-card:last-child { border-bottom: none; }
+
+  .temporal-article-card:hover { padding-left: 0.5rem; }
+
+  .temporal-card-num {
+    font-family: 'Inter', system-ui, sans-serif;
+    font-size: 0.85rem;
+    font-weight: 900;
+    color: var(--deep-green);
+    opacity: 0.3;
+    margin-bottom: 0.3rem;
+  }
+
+  .temporal-card-source {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.5rem;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 0.4rem;
+  }
+
+  .temporal-card-title {
+    font-family: 'Inter', system-ui, sans-serif;
+    font-size: 1.15rem;
+    font-weight: 700;
+    line-height: 1.3;
+    margin-bottom: 0.4rem;
+  }
+
+  .temporal-card-title a {
+    color: var(--ink);
+    text-decoration: none;
+    background-image: linear-gradient(var(--deep-green), var(--deep-green));
+    background-size: 0% 2px;
+    background-position: 0 100%;
+    background-repeat: no-repeat;
+    transition: background-size 0.4s ease;
+  }
+
+  .temporal-card-title a:hover { background-size: 100% 2px; }
+
+  .temporal-card-desc {
+    font-size: 0.84rem;
+    line-height: 1.6;
+    color: var(--slate);
+    font-weight: 300;
+  }
+
+  .temporal-badge {
+    display: inline-block;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.5rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    padding: 0.2rem 0.5rem;
+    border: 1px solid var(--deep-green);
+    color: var(--deep-green);
+    margin-top: 0.5rem;
+  }
+
+  @media (max-width: 900px) {
+    .temporal-spread { grid-template-columns: 1fr; }
+    .temporal-pillars { grid-template-columns: 1fr; }
+  }
+
+  @media (max-width: 600px) {
+    .temporal-editorial, .temporal-articles { padding: 1.8rem 1.2rem; }
+  }
+
+  /* === OPINION SPREAD: HARNESS VS AGENT === */
+  .opinion-spread {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    border-bottom: 3px solid var(--ink);
+    position: relative;
+  }
+
+  .opinion-spread::before {
+    content: 'VS';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-family: 'Inter', system-ui, sans-serif;
+    font-size: 2.5rem;
+    font-weight: 900;
+    color: white;
+    background: var(--rust);
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 10;
+    letter-spacing: -0.03em;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.2);
+  }
+
+  .opinion-col {
+    padding: 3.5rem;
+    position: relative;
+  }
+
+  .opinion-col-left {
+    background: var(--ink);
+    color: var(--cream);
+    border-right: 1px solid rgba(255,255,255,0.1);
+  }
+
+  .opinion-col-left::before {
+    content: '⟳';
+    position: absolute;
+    font-size: 16rem;
+    opacity: 0.03;
+    top: -1rem;
+    right: 1rem;
+    line-height: 1;
+    color: var(--cream);
+  }
+
+  .opinion-col-right {
+    background: var(--parchment);
+    color: var(--ink);
+  }
+
+  .opinion-col-right::before {
+    content: '◇';
+    position: absolute;
+    font-family: 'Inter', system-ui, sans-serif;
+    font-size: 16rem;
+    opacity: 0.04;
+    top: -1rem;
+    left: 1rem;
+    line-height: 1;
+    color: var(--ink);
+  }
+
+  .opinion-kicker {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.55rem;
+    letter-spacing: 0.4em;
+    text-transform: uppercase;
+    margin-bottom: 1.2rem;
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+  }
+
+  .opinion-kicker-left { color: var(--rust); }
+  .opinion-kicker-right { color: var(--deep-green); }
+
+  .opinion-kicker::before {
+    content: '';
+    width: 20px;
+    height: 2px;
+  }
+
+  .opinion-kicker-left::before { background: var(--rust); }
+  .opinion-kicker-right::before { background: var(--deep-green); }
+
+  .opinion-heading {
+    font-family: 'Inter', system-ui, sans-serif;
+    font-size: clamp(1.6rem, 2.5vw, 2.2rem);
+    font-weight: 700;
+    line-height: 1.15;
+    margin-bottom: 1.5rem;
+  }
+
+  .opinion-heading em {
+    font-style: normal;
+    font-weight: 800;
+  }
+
+  .opinion-col-left .opinion-heading em { color: var(--rust); }
+  .opinion-col-right .opinion-heading em { color: var(--deep-green); }
+
+  .opinion-body {
+    font-size: 0.92rem;
+    line-height: 1.75;
+    font-weight: 300;
+    margin-bottom: 1.5rem;
+  }
+
+  .opinion-col-left .opinion-body { color: rgba(245,240,232,0.75); }
+  .opinion-col-right .opinion-body { color: var(--slate); }
+
+  .opinion-col-left .opinion-body strong { color: var(--cream); font-weight: 600; }
+  .opinion-col-right .opinion-body strong { color: var(--ink); font-weight: 600; }
+
+  .opinion-trait-list {
+    list-style: none;
+    padding: 0;
+    margin: 1.5rem 0;
+  }
+
+  .opinion-trait {
+    display: flex;
+    gap: 0.8rem;
+    padding: 0.7rem 0;
+    font-size: 0.85rem;
+    line-height: 1.5;
+    align-items: baseline;
+  }
+
+  .opinion-col-left .opinion-trait { border-bottom: 1px solid rgba(245,240,232,0.06); }
+  .opinion-col-right .opinion-trait { border-bottom: 1px solid rgba(0,0,0,0.06); }
+
+  .trait-marker {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.6rem;
+    font-weight: 500;
+    flex-shrink: 0;
+    width: 18px;
+    text-align: center;
+  }
+
+  .opinion-col-left .trait-marker { color: var(--rust); }
+  .opinion-col-right .trait-marker { color: var(--deep-green); }
+
+  .opinion-col-left .opinion-trait { color: rgba(245,240,232,0.65); }
+  .opinion-col-right .opinion-trait { color: var(--slate); }
+
+  .opinion-example {
+    margin-top: 2rem;
+    padding: 1.2rem 1.5rem;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.65rem;
+    line-height: 1.7;
+    letter-spacing: 0.02em;
+    border-radius: 2px;
+  }
+
+  .opinion-col-left .opinion-example {
+    background: rgba(245,240,232,0.04);
+    border: 1px solid rgba(245,240,232,0.08);
+    color: rgba(245,240,232,0.55);
+  }
+
+  .opinion-col-right .opinion-example {
+    background: white;
+    border: 1px solid rgba(0,0,0,0.08);
+    color: var(--slate);
+  }
+
+  .opinion-example .ex-label {
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.2em;
+    font-size: 0.55rem;
+    margin-bottom: 0.5rem;
+    display: block;
+  }
+
+  .opinion-col-left .ex-label { color: var(--rust); }
+  .opinion-col-right .ex-label { color: var(--deep-green); }
+
+  /* Verdict banner below the two columns */
+  .opinion-verdict {
+    background: var(--ink);
+    padding: 2.5rem 3rem;
+    display: flex;
+    align-items: center;
+    gap: 2rem;
+    border-bottom: 3px solid var(--ink);
+  }
+
+  .verdict-icon {
+    font-family: 'Inter', system-ui, sans-serif;
+    font-size: 2.5rem;
+    font-weight: 900;
+    color: var(--rust);
+    flex-shrink: 0;
+    opacity: 0.6;
+  }
+
+  .verdict-text {
+    font-family: 'Inter', system-ui, sans-serif;
+    font-size: 1rem;
+    line-height: 1.7;
+    color: rgba(245,240,232,0.7);
+    font-weight: 300;
+    max-width: 700px;
+  }
+
+  .verdict-text strong {
+    color: var(--cream);
+    font-weight: 600;
+  }
+
+  .verdict-text em {
+    color: var(--gold);
+    
+  }
+
+  @media (max-width: 900px) {
+    .opinion-spread { grid-template-columns: 1fr; }
+    .opinion-spread::before {
+      top: auto;
+      bottom: 50%;
+      left: 50%;
+      transform: translate(-50%, 50%);
+    }
+    .opinion-col-left { border-right: none; border-bottom: 1px solid rgba(255,255,255,0.1); }
+    .opinion-verdict { flex-direction: column; text-align: center; }
+  }
+
+  @media (max-width: 600px) {
+    .opinion-col { padding: 2rem 1.2rem; }
+    .opinion-verdict { padding: 2rem 1.2rem; }
+  }
+
+  /* === REACT VS CODEACT TECHNICAL SIDEBAR === */
+  .loop-comparison {
+    border-bottom: 3px solid var(--ink);
+  }
+
+  .loop-header {
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+    padding: 2rem 3rem;
+    background: var(--parchment);
+    border-bottom: 1px solid rgba(0,0,0,0.08);
+  }
+
+  .loop-header-badge {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.55rem;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: white;
+    background: var(--rust);
+    padding: 0.3rem 0.8rem;
+    flex-shrink: 0;
+  }
+
+  .loop-header-title {
+    font-family: 'Inter', system-ui, sans-serif;
+    font-size: 1.4rem;
+    font-weight: 700;
+  }
+
+  .loop-cols {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+  }
+
+  .loop-col {
+    padding: 2.5rem;
+    border-right: 1px solid rgba(0,0,0,0.08);
+    position: relative;
+  }
+
+  .loop-col:last-child { border-right: none; }
+
+  .loop-col-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.6rem;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    margin-bottom: 1rem;
+    padding-bottom: 0.8rem;
+    border-bottom: 2px solid;
+  }
+
+  .loop-col:nth-child(1) .loop-col-label { color: #2a3a5a; border-color: #2a3a5a; }
+  .loop-col:nth-child(2) .loop-col-label { color: var(--deep-green); border-color: var(--deep-green); }
+  .loop-col:nth-child(3) .loop-col-label { color: var(--rust); border-color: var(--rust); }
+
+  .loop-col-name {
+    font-family: 'Inter', system-ui, sans-serif;
+    font-size: 1.2rem;
+    font-weight: 700;
+    margin-bottom: 0.8rem;
+    line-height: 1.2;
+  }
+
+  .loop-col-desc {
+    font-size: 0.85rem;
+    line-height: 1.65;
+    color: var(--slate);
+    font-weight: 300;
+    margin-bottom: 1.5rem;
+  }
+
+  .loop-cycle {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+    margin-bottom: 1.5rem;
+  }
+
+  .loop-step {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    padding: 0.5rem 0.7rem;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.6rem;
+    letter-spacing: 0.05em;
+    position: relative;
+  }
+
+  .loop-step + .loop-step::before {
+    content: '↓';
+    position: absolute;
+    top: -0.35rem;
+    left: 0.85rem;
+    font-size: 0.55rem;
+    color: var(--muted);
+  }
+
+  .loop-col:nth-child(1) .loop-step { background: rgba(42,58,90,0.06); color: #2a3a5a; }
+  .loop-col:nth-child(2) .loop-step { background: rgba(45,74,62,0.06); color: var(--deep-green); }
+  .loop-col:nth-child(3) .loop-step { background: rgba(196,80,26,0.06); color: var(--rust); }
+
+  .loop-step-num {
+    font-weight: 700;
+    opacity: 0.4;
+    flex-shrink: 0;
+    width: 14px;
+  }
+
+  .loop-tradeoff {
+    padding: 1rem;
+    border: 1px solid rgba(0,0,0,0.06);
+    background: white;
+    margin-top: auto;
+  }
+
+  .loop-tradeoff-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.5rem;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 0.4rem;
+  }
+
+  .loop-tradeoff-good {
+    font-size: 0.78rem;
+    line-height: 1.5;
+    color: var(--deep-green);
+    font-weight: 500;
+    margin-bottom: 0.2rem;
+  }
+
+  .loop-tradeoff-bad {
+    font-size: 0.78rem;
+    line-height: 1.5;
+    color: var(--rust);
+    font-weight: 400;
+  }
+
+  .loop-footnote {
+    padding: 1.5rem 3rem;
+    background: var(--parchment);
+    border-top: 1px solid rgba(0,0,0,0.06);
+    display: flex;
+    align-items: baseline;
+    gap: 1rem;
+  }
+
+  .loop-footnote-marker {
+    font-family: 'Inter', system-ui, sans-serif;
+    font-size: 1.2rem;
+    font-weight: 900;
+    color: var(--rust);
+    opacity: 0.4;
+    flex-shrink: 0;
+  }
+
+  .loop-footnote-text {
+    font-size: 0.88rem;
+    line-height: 1.65;
+    color: var(--slate);
+    font-weight: 300;
+    
+  }
+
+  .loop-footnote-text strong {
+    color: var(--ink);
+    font-weight: 600;
+    font-style: normal;
+  }
+
+  @media (max-width: 900px) {
+    .loop-cols { grid-template-columns: 1fr; }
+    .loop-col { border-right: none; border-bottom: 1px solid rgba(0,0,0,0.08); }
+    .loop-col:last-child { border-bottom: none; }
+  }
+
+  @media (max-width: 600px) {
+    .loop-header { padding: 1.5rem 1.2rem; flex-wrap: wrap; }
+    .loop-col { padding: 1.8rem 1.2rem; }
+    .loop-footnote { padding: 1.2rem; }
+  }
+
+  /* === THE AGENT/WORKFLOW TRAP === */
+  .trap-section {
+    border-bottom: 3px solid var(--ink);
+  }
+
+  .trap-banner {
+    background: #0D1B2A;
+    padding: 3rem;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+    border-bottom: 3px solid var(--rust);
+  }
+
+  .trap-banner::before {
+    content: '⚠';
+    position: absolute;
+    font-size: 18rem;
+    opacity: 0.04;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    line-height: 1;
+  }
+
+  .trap-banner-kicker {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.6rem;
+    letter-spacing: 0.45em;
+    text-transform: uppercase;
+    color: var(--rust);
+    margin-bottom: 1rem;
+  }
+
+  .trap-banner-title {
+    font-family: 'Inter', system-ui, sans-serif;
+    font-size: clamp(2rem, 4vw, 3.2rem);
+    font-weight: 900;
+    color: var(--cream);
+    line-height: 1.05;
+    margin-bottom: 1rem;
+  }
+
+  .trap-banner-title em {
+    color: var(--rust);
+    
+  }
+
+  .trap-banner-sub {
+    font-size: 1rem;
+    color: rgba(245,240,232,0.5);
+    font-weight: 300;
+    max-width: 600px;
+    margin: 0 auto;
+    line-height: 1.6;
+  }
+
+  .trap-risks {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .trap-risk-col {
+    padding: 3rem;
+  }
+
+  .trap-risk-col-wrong {
+    background: #0D1B2A;
+    color: var(--cream);
+    border-right: 1px solid rgba(196,80,26,0.2);
+  }
+
+  .trap-risk-col-right {
+    background: var(--cream);
+    color: var(--ink);
+  }
+
+  .trap-col-header {
+    display: flex;
+    align-items: center;
+    gap: 0.8rem;
+    margin-bottom: 2rem;
+  }
+
+  .trap-col-icon {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1rem;
+    flex-shrink: 0;
+  }
+
+  .trap-col-icon.danger { background: var(--rust); color: white; }
+  .trap-col-icon.safe { background: var(--deep-green); color: white; }
+
+  .trap-col-label {
+    font-family: 'Inter', system-ui, sans-serif;
+    font-size: 0.65rem;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    font-weight: 600;
+  }
+
+  .trap-risk-col-wrong .trap-col-label { color: var(--rust); }
+  .trap-risk-col-right .trap-col-label { color: var(--deep-green); }
+
+  .trap-col-title {
+    font-family: 'Inter', system-ui, sans-serif;
+    font-size: 1.05rem;
+    font-weight: 700;
+    line-height: 1.3;
+  }
+
+  .trap-risk-item {
+    padding: 1.2rem 0;
+    display: grid;
+    grid-template-columns: 24px 1fr;
+    gap: 0.8rem;
+    align-items: start;
+  }
+
+  .trap-risk-col-wrong .trap-risk-item { border-bottom: 1px solid rgba(245,240,232,0.04); }
+  .trap-risk-col-right .trap-risk-item { border-bottom: 1px solid rgba(0,0,0,0.05); }
+
+  .trap-risk-item:last-child { border-bottom: none; }
+
+  .trap-risk-marker {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.8rem;
+    font-weight: 700;
+    line-height: 1.8;
+  }
+
+  .trap-risk-col-wrong .trap-risk-marker { color: var(--rust); }
+  .trap-risk-col-right .trap-risk-marker { color: var(--deep-green); }
+
+  .trap-risk-title {
+    font-family: 'Inter', system-ui, sans-serif;
+    font-size: 0.82rem;
+    font-weight: 600;
+    margin-bottom: 0.2rem;
+  }
+
+  .trap-risk-desc {
+    font-size: 0.8rem;
+    line-height: 1.6;
+    font-weight: 300;
+  }
+
+  .trap-risk-col-wrong .trap-risk-title { color: var(--cream); }
+  .trap-risk-col-wrong .trap-risk-desc { color: rgba(245,240,232,0.55); }
+  .trap-risk-col-right .trap-risk-title { color: var(--ink); }
+  .trap-risk-col-right .trap-risk-desc { color: var(--slate); }
+
+  /* Trap spectrum bar */
+  .trap-spectrum {
+    padding: 2rem 3rem;
+    background: var(--parchment);
+    border-top: 1px solid rgba(0,0,0,0.06);
+  }
+
+  .spectrum-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.5rem;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: var(--muted);
+    text-align: center;
+    margin-bottom: 0.8rem;
+  }
+
+  .spectrum-bar {
+    display: flex;
+    height: 40px;
+    border-radius: 4px;
+    overflow: hidden;
+    position: relative;
+    margin-bottom: 0.5rem;
+  }
+
+  .spectrum-segment {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.5rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: white;
+    font-weight: 500;
+    transition: flex 0.3s;
+  }
+
+  .spectrum-labels {
+    display: flex;
+    justify-content: space-between;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.45rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+
+  @media (max-width: 900px) {
+    .trap-risks { grid-template-columns: 1fr; }
+    .trap-risk-col-wrong { border-right: none; border-bottom: 1px solid rgba(196,80,26,0.2); }
+  }
+
+  @media (max-width: 600px) {
+    .trap-banner { padding: 2rem 1.2rem; }
+    .trap-risk-col { padding: 2rem 1.2rem; }
+    .trap-spectrum { padding: 1.5rem 1.2rem; }
+  }
+
+  /* === CONVERGENCE: CODEACT + TEMPORAL SKILLS === */
+  .convergence-section {
+    border-bottom: 3px solid var(--ink);
+  }
+
+  .convergence-hero {
+    display: grid;
+    grid-template-columns: 1.2fr 1fr;
+    min-height: 50vh;
+  }
+
+  .convergence-left {
+    background: linear-gradient(135deg, #0D1B2A 0%, #1A3A5C 50%, #0D2D44 100%);
+    color: var(--cream);
+    padding: 3.5rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .convergence-left::before {
+    content: 'λ';
+    position: absolute;
+    font-family: 'Inter', system-ui, sans-serif;
+    font-size: 24rem;
+    opacity: 0.04;
+    bottom: -4rem;
+    right: -2rem;
+    line-height: 1;
+  }
+
+  .convergence-kicker {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.6rem;
+    letter-spacing: 0.4em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 1.5rem;
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+  }
+
+  .convergence-kicker::before {
+    content: '';
+    width: 24px;
+    height: 2px;
+    background: var(--gold);
+  }
+
+  .convergence-headline {
+    font-family: 'Inter', system-ui, sans-serif;
+    font-size: clamp(2rem, 3.5vw, 2.8rem);
+    font-weight: 700;
+    line-height: 1.1;
+    margin-bottom: 1.5rem;
+  }
+
+  .convergence-headline em {
+    
+    color: var(--gold);
+  }
+
+  .convergence-body {
+    font-size: 0.95rem;
+    line-height: 1.75;
+    color: rgba(245,240,232,0.75);
+    font-weight: 300;
+    margin-bottom: 1rem;
+  }
+
+  .convergence-body strong {
+    color: var(--cream);
+    font-weight: 600;
+  }
+
+  .convergence-right {
+    background: var(--cream);
+    padding: 2.5rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+
+  /* Code-like skill examples */
+  .skill-block {
+    background: var(--ink);
+    color: var(--cream);
+    padding: 1.5rem;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.65rem;
+    line-height: 1.8;
+    margin-bottom: 1rem;
+    border-left: 3px solid;
+    overflow-x: auto;
+    position: relative;
+  }
+
+  .skill-block:nth-child(1) { border-color: var(--gold); }
+  .skill-block:nth-child(2) { border-color: var(--deep-green); }
+  .skill-block:nth-child(3) { border-color: var(--rust); }
+
+  .skill-block-label {
+    position: absolute;
+    top: 0.5rem;
+    right: 0.7rem;
+    font-size: 0.45rem;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    opacity: 0.35;
+  }
+
+  .sk-comment { color: rgba(245,240,232,0.3); }
+  .sk-keyword { color: #c4501a; }
+  .sk-func { color: #b8860b; }
+  .sk-string { color: #7aad8a; }
+  .sk-type { color: #8aaad0; }
+
+  /* Collapse diagram — redesigned */
+  .convergence-collapse {
+    padding: 3.5rem 3rem;
+    border-top: 1px solid rgba(0,0,0,0.08);
+    background: var(--ink);
+    color: var(--cream);
+    position: relative;
+    overflow: hidden;
+  }
+
+  .convergence-collapse::before {
+    content: '→';
+    position: absolute;
+    font-family: 'Inter', system-ui, sans-serif;
+    font-size: 18rem;
+    opacity: 0.03;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    line-height: 1;
+  }
+
+  .collapse-title {
+    text-align: center;
+    font-family: 'Inter', system-ui, sans-serif;
+    font-size: 1.5rem;
+    font-weight: 700;
+    margin-bottom: 0.4rem;
+    color: var(--cream);
+  }
+
+  .collapse-subtitle {
+    text-align: center;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.55rem;
+    letter-spacing: 0.35em;
+    text-transform: uppercase;
+    color: rgba(245,240,232,0.35);
+    margin-bottom: 2.5rem;
+  }
+
+  .collapse-grid {
+    display: grid;
+    grid-template-columns: 1fr 60px 1fr;
+    gap: 0;
+    max-width: 900px;
+    margin: 0 auto;
+    align-items: start;
+  }
+
+  .collapse-col {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+
+  .collapse-col-header {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.5rem;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: rgba(245,240,232,0.4);
+    margin-bottom: 0.6rem;
+    text-align: center;
+  }
+
+  .collapse-layer {
+    padding: 0.65rem 1rem;
+    font-family: 'Inter', system-ui, sans-serif;
+    font-size: 0.7rem;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: white;
+    text-align: center;
+    border-radius: 4px;
+    transition: all 0.3s ease;
+  }
+
+  .collapse-layer:hover {
+    transform: scale(1.02);
+  }
+
+  .collapse-layer.unchanged { opacity: 0.85; }
+
+  .collapse-layer.evolved {
+    opacity: 1;
+    position: relative;
+    box-shadow: 0 0 0 2px var(--gold), 0 2px 12px rgba(184,134,11,0.2);
+  }
+
+  .collapse-layer.evolved .layer-annotation {
+    display: block;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.45rem;
+    font-weight: 400;
+    letter-spacing: 0.15em;
+    color: var(--gold);
+    margin-top: 0.2rem;
+    text-transform: none;
+  }
+
+  .collapse-layer.absorbed {
+    opacity: 0.2;
+    position: relative;
+    background: var(--slate) !important;
+  }
+
+  .collapse-layer.absorbed::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 10%;
+    right: 10%;
+    height: 1px;
+    background: rgba(245,240,232,0.5);
+  }
+
+  .collapse-center {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    padding-top: 2rem;
+  }
+
+  .collapse-center svg {
+    opacity: 0.3;
+  }
+
+  .convergence-footnote {
+    padding: 1.5rem 3rem;
+    background: var(--cream);
+    border-top: 1px solid rgba(0,0,0,0.06);
+    display: flex;
+    align-items: baseline;
+    gap: 1rem;
+  }
+
+  .convergence-footnote-marker {
+    font-family: 'Inter', system-ui, sans-serif;
+    font-size: 1.2rem;
+    font-weight: 900;
+    color: var(--gold);
+    opacity: 0.5;
+    flex-shrink: 0;
+  }
+
+  .convergence-footnote-text {
+    font-size: 0.88rem;
+    line-height: 1.65;
+    color: var(--slate);
+    font-weight: 300;
+  }
+
+  .convergence-footnote-text strong {
+    color: var(--ink);
+    font-weight: 600;
+  }
+
+  @media (max-width: 900px) {
+    .convergence-hero { grid-template-columns: 1fr; }
+    .collapse-grid { grid-template-columns: 1fr; gap: 1.5rem; }
+    .collapse-center { display: none; }
+  }
+
+  @media (max-width: 600px) {
+    .convergence-left, .convergence-right { padding: 2rem 1.2rem; }
+    .convergence-collapse { padding: 1.5rem 1.2rem; }
+    .convergence-footnote { padding: 1.2rem; }
+  }
+
+  /* === MARKETING HARNESS SECTION === */
+  .mktg-section {
+    border-bottom: 3px solid var(--ink);
+  }
+
+  .mktg-hero {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    min-height: 55vh;
+  }
+
+  .mktg-hero-left {
+    background: linear-gradient(160deg, #0D1B2A 0%, #1A3A5C 50%, #0D2D44 100%);
+    color: var(--cream);
+    padding: 3.5rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .mktg-hero-left::before {
+    content: '⎈';
+    position: absolute;
+    font-size: 20rem;
+    opacity: 0.03;
+    bottom: -3rem;
+    right: -1rem;
+    line-height: 1;
+    color: var(--cream);
+  }
+
+  .mktg-kicker {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.6rem;
+    letter-spacing: 0.4em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 1.5rem;
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+  }
+
+  .mktg-kicker::before {
+    content: '';
+    width: 24px;
+    height: 2px;
+    background: var(--gold);
+  }
+
+  .mktg-headline {
+    font-family: 'Inter', system-ui, sans-serif;
+    font-size: clamp(2rem, 3.5vw, 2.8rem);
+    font-weight: 700;
+    line-height: 1.1;
+    margin-bottom: 1.5rem;
+  }
+
+  .mktg-headline em {
+    font-style: normal;
+    font-weight: 800;
+    color: var(--rust);
+  }
+
+  .mktg-body {
+    font-size: 0.95rem;
+    line-height: 1.75;
+    color: rgba(245,240,232,0.7);
+    font-weight: 300;
+  }
+
+  .mktg-body strong {
+    color: var(--cream);
+    font-weight: 600;
+  }
+
+  .mktg-hero-right {
+    background: var(--cream);
+    padding: 2.5rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 0;
+  }
+
+  /* Workflow swim lane */
+  .mktg-workflow {
+    position: relative;
+    padding-left: 2.5rem;
+  }
+
+  .mktg-workflow::before {
+    content: '';
+    position: absolute;
+    left: 0.7rem;
+    top: 0;
+    bottom: 0;
+    width: 2px;
+    background: linear-gradient(to bottom, var(--rust), var(--gold), var(--deep-green));
+    border-radius: 1px;
+  }
+
+  .mktg-wf-step {
+    position: relative;
+    padding: 1rem 0;
+    transition: padding-left 0.3s;
+  }
+
+  .mktg-wf-step:hover { padding-left: 0.3rem; }
+
+  .mktg-wf-step + .mktg-wf-step {
+    border-top: 1px solid rgba(0,0,0,0.04);
+  }
+
+  .mktg-wf-step::before {
+    content: '';
+    position: absolute;
+    left: -2.15rem;
+    top: 1.35rem;
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    border: 2px solid;
+    background: var(--cream);
+  }
+
+  .mktg-wf-step:nth-child(1)::before { border-color: var(--gold); }
+  .mktg-wf-step:nth-child(2)::before { border-color: var(--rust); }
+  .mktg-wf-step:nth-child(3)::before { border-color: var(--gold); }
+  .mktg-wf-step:nth-child(4)::before { border-color: var(--deep-green); }
+  .mktg-wf-step:nth-child(5)::before { border-color: #2a3a5a; }
+
+  .wf-step-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.5rem;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 0.25rem;
+  }
+
+  .wf-step-title {
+    font-family: 'Inter', system-ui, sans-serif;
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: var(--ink);
+    margin-bottom: 0.2rem;
+  }
+
+  .wf-step-detail {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.55rem;
+    color: var(--slate);
+    line-height: 1.5;
+  }
+
+  .wf-step-tools {
+    display: flex;
+    gap: 0.4rem;
+    margin-top: 0.4rem;
+    flex-wrap: wrap;
+  }
+
+  .wf-tool-tag {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.45rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    padding: 0.15rem 0.45rem;
+    border-radius: 2px;
+    font-weight: 500;
+  }
+
+  .wf-tool-tag.aprimo { background: rgba(240,90,40,0.12); color: var(--rust); }
+  .wf-tool-tag.salesforce { background: rgba(0,112,210,0.1); color: #0070d2; }
+  .wf-tool-tag.temporal { background: rgba(45,74,62,0.1); color: var(--deep-green); }
+
+  /* Architecture mapping grid */
+  .mktg-arch-map {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 2px;
+    padding: 0;
+    background: var(--parchment);
+    border-top: 1px solid rgba(0,0,0,0.08);
+  }
+
+  .mktg-arch-cell {
+    padding: 1.5rem 1rem;
+    text-align: center;
+    transition: background 0.3s;
+  }
+
+  .mktg-arch-cell:hover { background: rgba(0,0,0,0.02); }
+
+  .mktg-arch-icon {
+    font-size: 1.4rem;
+    margin-bottom: 0.6rem;
+    display: block;
+  }
+
+  .mktg-arch-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.5rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 0.4rem;
+  }
+
+  .mktg-arch-mapping {
+    font-family: 'Inter', system-ui, sans-serif;
+    font-size: 0.72rem;
+    font-weight: 600;
+    color: var(--ink);
+    line-height: 1.3;
+    margin-bottom: 0.3rem;
+  }
+
+  .mktg-arch-detail {
+    font-size: 0.6rem;
+    color: var(--slate);
+    line-height: 1.4;
+    font-weight: 300;
+  }
+
+  /* Skill code blocks for marketing */
+  .mktg-skills-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    border-top: 1px solid rgba(0,0,0,0.08);
+  }
+
+  .mktg-skill-panel {
+    padding: 2.5rem;
+    border-right: 1px solid rgba(0,0,0,0.08);
+  }
+
+  .mktg-skill-panel:last-child { border-right: none; }
+
+  .mktg-skill-header {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    margin-bottom: 1.2rem;
+  }
+
+  .mktg-skill-badge {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.45rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    padding: 0.2rem 0.5rem;
+    color: white;
+    border-radius: 2px;
+  }
+
+  .mktg-skill-badge.aprimo-bg { background: var(--rust); }
+  .mktg-skill-badge.salesforce-bg { background: #0070d2; }
+
+  .mktg-skill-name {
+    font-family: 'Inter', system-ui, sans-serif;
+    font-size: 1.1rem;
+    font-weight: 700;
+  }
+
+  .mktg-skill-desc {
+    font-size: 0.85rem;
+    line-height: 1.6;
+    color: var(--slate);
+    font-weight: 300;
+    margin-bottom: 1.2rem;
+  }
+
+  @media (max-width: 900px) {
+    .mktg-hero { grid-template-columns: 1fr; }
+    .mktg-arch-map { grid-template-columns: repeat(3, 1fr); }
+    .mktg-skills-grid { grid-template-columns: 1fr; }
+    .mktg-skill-panel { border-right: none; border-bottom: 1px solid rgba(0,0,0,0.08); }
+    .mktg-skill-panel:last-child { border-bottom: none; }
+  }
+
+  @media (max-width: 600px) {
+    .mktg-hero-left, .mktg-hero-right { padding: 2rem 1.2rem; }
+    .mktg-arch-map { grid-template-columns: repeat(2, 1fr); }
+    .mktg-skill-panel { padding: 1.8rem 1.2rem; }
+  }
+
+  /* === APPROVAL ORCHESTRATION PANEL === */
+  .approval-panel {
+    display: grid;
+    grid-template-columns: 1fr 1.3fr;
+    border-top: 1px solid rgba(0,0,0,0.08);
+    background: var(--ink);
+    color: var(--cream);
+  }
+
+  .approval-narrative {
+    padding: 3rem;
+    border-right: 1px solid rgba(255,255,255,0.06);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .approval-narrative::before {
+    content: '✓';
+    position: absolute;
+    font-size: 16rem;
+    opacity: 0.025;
+    bottom: -2rem;
+    right: -1rem;
+    line-height: 1;
+  }
+
+  .approval-kicker {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.55rem;
+    letter-spacing: 0.4em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 1.2rem;
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+  }
+
+  .approval-kicker::before {
+    content: '';
+    width: 20px;
+    height: 2px;
+    background: var(--gold);
+  }
+
+  .approval-headline {
+    font-family: 'Inter', system-ui, sans-serif;
+    font-size: clamp(1.4rem, 2.5vw, 1.9rem);
+    font-weight: 700;
+    line-height: 1.15;
+    margin-bottom: 1.2rem;
+  }
+
+  .approval-headline em {
+    
+    color: var(--gold);
+  }
+
+  .approval-body {
+    font-size: 0.9rem;
+    line-height: 1.75;
+    color: rgba(245,240,232,0.7);
+    font-weight: 300;
+    margin-bottom: 1rem;
+  }
+
+  .approval-body strong {
+    color: var(--cream);
+    font-weight: 600;
+  }
+
+  .approval-code-area {
+    padding: 2.5rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+
+  /* Approval chain visual */
+  .approval-chain {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+    margin-bottom: 1.5rem;
+  }
+
+  .approval-chain-step {
+    display: grid;
+    grid-template-columns: 32px 1fr auto;
+    gap: 0.8rem;
+    align-items: center;
+    padding: 0.7rem 0;
+    border-bottom: 1px solid rgba(245,240,232,0.05);
+  }
+
+  .approval-chain-step:last-child { border-bottom: none; }
+
+  .chain-dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    justify-self: center;
+    position: relative;
+  }
+
+  .chain-dot::after {
+    content: '';
+    position: absolute;
+    top: 10px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 1px;
+    height: 20px;
+    background: rgba(245,240,232,0.1);
+  }
+
+  .approval-chain-step:last-child .chain-dot::after { display: none; }
+
+  .chain-dot.pending { background: rgba(245,240,232,0.15); border: 1px solid rgba(245,240,232,0.3); }
+  .chain-dot.waiting { background: var(--gold); box-shadow: 0 0 8px rgba(184,134,11,0.4); }
+  .chain-dot.approved { background: var(--deep-green); }
+  .chain-dot.executing { background: var(--rust); box-shadow: 0 0 8px rgba(196,80,26,0.4); }
+
+  .chain-label {
+    font-family: 'Inter', system-ui, sans-serif;
+    font-size: 0.78rem;
+    font-weight: 500;
+    color: var(--cream);
+  }
+
+  .chain-sublabel {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.5rem;
+    color: rgba(245,240,232,0.4);
+  }
+
+  .chain-status {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.5rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    padding: 0.2rem 0.5rem;
+    border-radius: 2px;
+  }
+
+  .chain-status.s-approved { background: rgba(45,74,62,0.3); color: #7aad8a; }
+  .chain-status.s-waiting { background: rgba(184,134,11,0.2); color: var(--gold); }
+  .chain-status.s-pending { background: rgba(245,240,232,0.05); color: rgba(245,240,232,0.3); }
+  .chain-status.s-executing { background: rgba(196,80,26,0.2); color: var(--rust); }
+
+  @media (max-width: 900px) {
+    .approval-panel { grid-template-columns: 1fr; }
+    .approval-narrative { border-right: none; border-bottom: 1px solid rgba(255,255,255,0.06); }
+  }
+
+  @media (max-width: 600px) {
+    .approval-narrative, .approval-code-area { padding: 2rem 1.2rem; }
+  }
+
+  /* === COLOPHON / FOOTER === */
+  .colophon {
+    background: var(--ink);
+    color: rgba(245,240,232,0.5);
+    padding: 3rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.6rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+  }
+
+  .colophon-title {
+    font-family: 'Inter', system-ui, sans-serif;
+    font-size: 1.5rem;
+    font-weight: 900;
+    color: var(--cream);
+    letter-spacing: -0.02em;
+    text-transform: none;
+  }
+
+  /* === ANIMATIONS === */
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .masthead, .hero-left, .hero-right, .editorial-cell,
+  .pullquote-banner, .feature-article, .sidebar-item {
+    animation: fadeUp 0.6s ease-out both;
+  }
+
+  .hero-left { animation-delay: 0.1s; }
+  .hero-right { animation-delay: 0.25s; }
+  .editorial-cell:nth-child(1) { animation-delay: 0.1s; }
+  .editorial-cell:nth-child(2) { animation-delay: 0.2s; }
+  .editorial-cell:nth-child(3) { animation-delay: 0.3s; }
+
+  /* === RESPONSIVE === */
+  @media (max-width: 900px) {
+    .hero { grid-template-columns: 1fr; }
+    .editorial-grid { grid-template-columns: 1fr; }
+    .editorial-cell { border-right: none; border-bottom: 1px solid rgba(0,0,0,0.1); }
+    .feature-split { grid-template-columns: 1fr; }
+    .feature-main { border-right: none; }
+    .nav-bar { gap: 1.2rem; }
+    .colophon { flex-direction: column; gap: 1rem; text-align: center; }
+  }
+
+  @media (max-width: 600px) {
+    .masthead { padding: 2rem 1.2rem 0.8rem; }
+    .hero-left, .hero-right, .editorial-cell, .feature-main, .feature-sidebar { padding: 1.8rem 1.2rem; }
+    .feature-article { grid-template-columns: 1fr; gap: 0.5rem; }
+    .feature-num { font-size: 2rem; }
+    .section-header { padding: 2rem 1.2rem 1rem; flex-wrap: wrap; }
+  }
+
+  /* === GD LOGO BAR === */
+  .masthead-logo-bar {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 1.5rem;
+  }
+
+  .masthead-gd-logo {
+    height: 28px;
+    width: auto;
+    display: block;
+    opacity: 0.9;
+  }
+
+  /* === GD FOOTER === */
+  .gd-footer {
+    background: #3C3C3C;
+    color: rgba(255,255,255,0.75);
+    padding: 2.5rem 3rem;
+    font-family: 'Inter', system-ui, sans-serif;
+  }
+
+  .gd-footer-links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.3rem 1.5rem;
+    margin-bottom: 1.5rem;
+    padding-bottom: 1.5rem;
+    border-bottom: 1px solid rgba(255,255,255,0.12);
+  }
+
+  .gd-footer-links a {
+    font-size: 0.78rem;
+    color: rgba(255,255,255,0.7);
+    text-decoration: none;
+    letter-spacing: 0.01em;
+    transition: color 0.2s;
+  }
+
+  .gd-footer-links a:hover { color: #F29100; }
+
+  .gd-footer-links .link-sep {
+    color: rgba(255,255,255,0.25);
+    font-size: 0.78rem;
+    user-select: none;
+  }
+
+  .gd-footer-copyright {
+    font-size: 0.75rem;
+    line-height: 1.6;
+    color: rgba(255,255,255,0.55);
+    margin-bottom: 0.8rem;
+    font-weight: 400;
+  }
+
+  .gd-footer-disclosure {
+    font-size: 0.72rem;
+    line-height: 1.7;
+    color: rgba(255,255,255,0.4);
+    max-width: 900px;
+  }
+
+  @media (max-width: 600px) {
+    .gd-footer { padding: 2rem 1.2rem; }
+    .gd-footer-links { gap: 0.4rem 1rem; }
+  }
+</style>
+</head>
+<body>
+
+<!-- MASTHEAD -->
+<header class="masthead">
+  <div class="masthead-logo-bar">
+    <img src="https://cdnwp.griddynamics.com/wp-content/uploads/2023/07/gd-logo.svg" alt="Grid Dynamics" class="masthead-gd-logo">
+  </div>
+  <div class="masthead-issue">Volume 01 · April 2026 · A Curated Reading List</div>
+  <h1 class="masthead-title">H<span class="accent">A</span>RNESS</h1>
+  <p class="masthead-subtitle">The Definitive Reading List for Agent Engineers</p>
+  <div class="masthead-rule">
+    <span>A Curated Reading List</span>
+  </div>
+</header>
+
+<!-- NAV -->
+<nav class="nav-bar">
+  <a href="#foundations">Foundations</a>
+  <a href="#build-guides">Essential Reading</a>
+  <a href="#architecture">Architecture</a>
+  <a href="#opinion">Harness vs. Agent</a>
+  <a href="#trap">The Trap</a>
+  <a href="#convergence">CodeAct + Temporal</a>
+  <a href="#marketing">Marketing Harness</a>
+</nav>
+
+<!-- HERO -->
+<section class="hero" id="foundations">
+  <div class="hero-left">
+    <div class="hero-tag">Editor's Pick — Foundations</div>
+    <h2 class="hero-headline">Harness Engineering for <em>Coding Agent</em> Users</h2>
+    <p class="hero-excerpt">Martin Fowler's definitive piece introduces the "build to delete" principle and argues that harness quality — not model quality — is what determines whether an agent survives production. The essential starting point.</p>
+    <a href="https://martinfowler.com/articles/harness-engineering.html" target="_blank" class="cell-read-more" style="color: var(--rust); margin-top: 2rem;">Read on MartinFowler.com</a>
+    <div class="hero-meta">martinfowler.com · Est. reading: 18 min</div>
+  </div>
+
+  <div class="hero-right">
+    <div class="hero-card">
+      <span class="card-number">02</span>
+      <div class="card-source">Anthropic Engineering Blog</div>
+      <h3 class="card-title"><a href="https://www.anthropic.com/engineering/effective-harnesses-for-long-running-agents" target="_blank">Effective Harnesses for Long-Running Agents</a></h3>
+      <p class="card-desc">How to design harnesses that keep long-horizon agents on track — persistence, checkpointing, and recovery patterns from the team behind Claude.</p>
+    </div>
+
+    <div class="hero-card">
+      <span class="card-number">03</span>
+      <div class="card-source">Parallel AI</div>
+      <h3 class="card-title"><a href="https://parallel.ai/articles/what-is-an-agent-harness" target="_blank">What Is an Agent Harness in the Context of LLMs?</a></h3>
+      <p class="card-desc">A clear explainer of the four pillars: system prompt, tools, context, and subagents. Ideal if you want the conceptual model before diving into code.</p>
+    </div>
+  </div>
+</section>
+
+<!-- SECTION: BUILD GUIDES -->
+<div class="section-header" id="build-guides">
+  <span class="section-number">II</span>
+  <div>
+    <div class="section-label">Section Two — Curated</div>
+    <h2 class="section-title">Essential Reading</h2>
+  </div>
+</div>
+
+<section class="editorial-grid" style="border-bottom: 1px solid rgba(0,0,0,0.1);">
+  <div class="editorial-cell">
+    <div class="cell-icon green">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg>
+    </div>
+    <div class="cell-source">Atlan</div>
+    <h3 class="cell-title"><a href="https://atlan.com/know/how-to-build-ai-agent-harness/" target="_blank">How to Build an AI Agent Harness: A 2026 Complete Guide</a></h3>
+    <p class="cell-desc">Walks through a four-layer architecture — from metadata foundation to agent orchestration — with concrete implementation steps for modern stacks.</p>
+    <a href="https://atlan.com/know/how-to-build-ai-agent-harness/" target="_blank" class="cell-read-more">Read article</a>
+  </div>
+
+  <div class="editorial-cell">
+    <div class="cell-icon rust">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><path d="M14 2v6h6"/><path d="M16 13H8"/><path d="M16 17H8"/></svg>
+    </div>
+    <div class="cell-source">Gitbook / Study Notes</div>
+    <h3 class="cell-title"><a href="https://snowan.gitbook.io/study-notes/ai-blogs/how-to-build-agent-harness" target="_blank">A Practical Guide from Teams Who Actually Did It</a></h3>
+    <p class="cell-desc">Real-world war stories and lessons from teams that shipped agent harnesses to production. Invaluable for avoiding the pitfalls that break most teams within three months.</p>
+    <a href="https://snowan.gitbook.io/study-notes/ai-blogs/how-to-build-agent-harness" target="_blank" class="cell-read-more">Read article</a>
+  </div>
+
+  <div class="editorial-cell">
+    <div class="cell-icon gold">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
+    </div>
+    <div class="cell-source">Paragon</div>
+    <h3 class="cell-title"><a href="https://www.useparagon.com/learn/guide-to-agent-harnesses/" target="_blank">Building, Measuring, and Improving Your Agent</a></h3>
+    <p class="cell-desc">A full lifecycle guide covering the build-measure-improve loop. Particularly strong on instrumentation and the feedback cycles that turn a prototype into a product.</p>
+    <a href="https://www.useparagon.com/learn/guide-to-agent-harnesses/" target="_blank" class="cell-read-more">Read article</a>
+  </div>
+</section>
+
+<section class="feature-split" style="border-bottom: 1px solid rgba(0,0,0,0.1);">
+  <div class="feature-main">
+    <div class="feature-article">
+      <div class="feature-num">01</div>
+      <div class="feature-content">
+        <div class="feature-source">Anthropic Engineering Blog</div>
+        <h3 class="feature-title"><a href="https://www.anthropic.com/engineering/demystifying-evals-for-ai-agents" target="_blank">Demystifying Evals for AI Agents</a></h3>
+        <p class="feature-desc">Standard LLM evaluation scores a single prompt-response pair, but agent evaluation must account for multi-step workflows where errors in early steps corrupt everything downstream. Anthropic's guide to getting this right.</p>
+      </div>
+    </div>
+
+    <div class="feature-article">
+      <div class="feature-num">02</div>
+      <div class="feature-content">
+        <div class="feature-source">Atlan</div>
+        <h3 class="feature-title"><a href="https://atlan.com/know/how-to-test-ai-agent-harness/" target="_blank">How to Test an AI Agent Harness: The Six-Layer Guide</a></h3>
+        <p class="feature-desc">A structured approach covering unit tests for individual components, integration tests for multi-step workflows, and adversarial testing for edge cases and failure modes.</p>
+      </div>
+    </div>
+
+    <div class="feature-article">
+      <div class="feature-num">03</div>
+      <div class="feature-content">
+        <div class="feature-source">Medium — Michael Lanham</div>
+        <h3 class="feature-title"><a href="https://medium.com/@Micheal-Lanham/how-to-build-an-evaluation-harness-for-your-ai-agent-before-it-books-the-wrong-flight-84de83a47207" target="_blank">Build an Evaluation Harness (Before It Books the Wrong Flight)</a></h3>
+        <p class="feature-desc">A practical walkthrough on building a testing sandbox where agents interact with mocked tools safely — critical for catching failures before they reach real users.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="feature-sidebar">
+    <div style="font-family: 'JetBrains Mono', monospace; font-size: 0.6rem; letter-spacing: 0.35em; text-transform: uppercase; color: var(--rust); margin-bottom: 0.5rem;">Also Noteworthy</div>
+
+    <div class="sidebar-item">
+      <div class="sidebar-tag">Addy Osmani</div>
+      <h4 class="sidebar-title"><a href="https://addyosmani.com/blog/agent-harness-engineering/" target="_blank">Agent Harness Engineering</a></h4>
+      <p class="sidebar-desc">A Chrome DevTools veteran's perspective on the engineering discipline of building reliable harnesses.</p>
+    </div>
+
+    <div class="sidebar-item">
+      <div class="sidebar-tag">Braintrust</div>
+      <h4 class="sidebar-title"><a href="https://www.braintrust.dev/articles/ai-agent-evaluation-framework" target="_blank">A Practical Framework for Testing Multi-Step Agents</a></h4>
+      <p class="sidebar-desc">Braintrust's framework for evaluating agents that execute complex, branching workflows.</p>
+    </div>
+
+    <div class="sidebar-item">
+      <div class="sidebar-tag">GitHub — OpenHarness</div>
+      <h4 class="sidebar-title"><a href="https://github.com/HKUDS/OpenHarness" target="_blank">OpenHarness: Open Agent Harness with Ohmo!</a></h4>
+      <p class="sidebar-desc">An open-source agent harness with a built-in personal agent. Good for hands-on experimentation.</p>
+    </div>
+  </div>
+</section>
+
+<!-- SECTION: BASELINE ARCHITECTURE -->
+<div class="section-header" id="architecture">
+  <span class="section-number">III</span>
+  <div>
+    <div class="section-label">Section Three — Reference</div>
+    <h2 class="section-title">Baseline Harness Architecture</h2>
+  </div>
+</div>
+
+<section class="arch-section">
+  <div class="arch-intro">
+    <div class="arch-intro-left">
+      <div style="font-family: 'JetBrains Mono', monospace; font-size: 0.6rem; letter-spacing: 0.35em; text-transform: uppercase; color: var(--rust); margin-bottom: 1rem;">Reference Architecture</div>
+      <h3 style="font-family: 'Inter', system-ui, sans-serif; font-size: 1.6rem; font-weight: 700; line-height: 1.2; margin-bottom: 1rem;">Seven Layers from User Intent to Durable State</h3>
+      <p class="arch-intro-text">Every production harness — regardless of framework — decomposes into the same structural layers. The model sits at the center of the orchestration loop; <strong>everything else is harness</strong>. This reference maps the baseline components that the articles in this magazine collectively describe.</p>
+    </div>
+    <div class="arch-intro-right">
+      <p class="arch-intro-text">A minimum viable harness (MVH) ships in 2–4 hours: a ReAct loop, 4–5 atomic tools, a max-iteration ceiling, and append-only history. <strong>The path from MVH to production is 5,000–20,000 lines</strong> — the layers below show where that code lives. Hover each block for detail.</p>
+    </div>
+  </div>
+
+  <div class="arch-diagram-wrap">
+    <div class="arch-diagram">
+
+      <!-- LAYER 1: User Interface -->
+      <div class="arch-layer">
+        <div class="arch-layer-label layer-user">
+          <span class="layer-name">User Layer</span>
+          <span class="layer-sub">Entry &amp; Exit</span>
+        </div>
+        <div class="arch-layer-content" style="background: #5a4a3a;">
+          <div class="arch-block">
+            <div class="block-title">User Input</div>
+            <div class="block-detail">Chat, API, webhook, cron trigger</div>
+          </div>
+          <div class="arch-block">
+            <div class="block-title">Session Router</div>
+            <div class="block-detail">Multi-turn state, session ID binding</div>
+          </div>
+          <div class="arch-block">
+            <div class="block-title">Output Formatter</div>
+            <div class="block-detail">Streaming, structured response, citations</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="arch-connector">
+        <svg width="20" height="14" viewBox="0 0 20 14"><path d="M10 0 L10 10 L6 6 M10 10 L14 6" stroke="var(--ink)" stroke-width="1.5" fill="none"/></svg>
+      </div>
+
+      <!-- LAYER 2: Guardrails -->
+      <div class="arch-layer">
+        <div class="arch-layer-label layer-guardrails">
+          <span class="layer-name">Guardrails</span>
+          <span class="layer-sub">Safety &amp; Validation</span>
+        </div>
+        <div class="arch-layer-content" style="background: var(--rust);">
+          <div class="arch-block">
+            <div class="block-title">Input Guards</div>
+            <div class="block-detail">Prompt injection regex, banned keywords, PII detection</div>
+          </div>
+          <div class="arch-block">
+            <div class="block-title">Output Guards</div>
+            <div class="block-detail">PII redaction, schema validation, toxicity filter</div>
+          </div>
+          <div class="arch-block">
+            <div class="block-title">Rate Limiter</div>
+            <div class="block-detail">Token budget, cost ceiling, max iterations</div>
+          </div>
+          <div class="arch-block">
+            <div class="block-title">Permission Tiers</div>
+            <div class="block-detail">RBAC, tool allowlists, scope boundaries</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="arch-connector">
+        <svg width="20" height="14" viewBox="0 0 20 14"><path d="M10 0 L10 10 L6 6 M10 10 L14 6" stroke="var(--ink)" stroke-width="1.5" fill="none"/></svg>
+      </div>
+
+      <!-- LAYER 3: Orchestration -->
+      <div class="arch-layer">
+        <div class="arch-layer-label layer-orchestrate">
+          <span class="layer-name">Orchestration</span>
+          <span class="layer-sub">The Core Loop</span>
+        </div>
+        <div class="arch-layer-content" style="background: #3a2a1a;">
+          <div class="arch-block" style="flex: 2;">
+            <div class="block-title">ReAct / Plan-Execute Loop</div>
+            <div class="block-detail">Think → Act → Observe cycle, max-step ceiling, early-exit conditions</div>
+          </div>
+          <div class="arch-block">
+            <div class="block-title">Subagent Spawner</div>
+            <div class="block-detail">Child workflows, fan-out / fan-in, delegation</div>
+          </div>
+          <div class="arch-block">
+            <div class="block-title">Human-in-the-Loop</div>
+            <div class="block-detail">Approval gates, escalation, signal wait</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="arch-connector">
+        <svg width="20" height="14" viewBox="0 0 20 14"><path d="M10 0 L10 10 L6 6 M10 10 L14 6" stroke="var(--ink)" stroke-width="1.5" fill="none"/></svg>
+      </div>
+
+      <!-- LAYER 4: Context Management -->
+      <div class="arch-layer">
+        <div class="arch-layer-label layer-context">
+          <span class="layer-name">Context</span>
+          <span class="layer-sub">Memory &amp; Retrieval</span>
+        </div>
+        <div class="arch-layer-content" style="background: var(--deep-green);">
+          <div class="arch-block">
+            <div class="block-title">System Prompt</div>
+            <div class="block-detail">Role, constraints, output format, persona</div>
+          </div>
+          <div class="arch-block">
+            <div class="block-title">Message History</div>
+            <div class="block-detail">Sliding window, summarization, token pruning</div>
+          </div>
+          <div class="arch-block">
+            <div class="block-title">RAG / Knowledge</div>
+            <div class="block-detail">Vector search, document chunks, reranking</div>
+          </div>
+          <div class="arch-block">
+            <div class="block-title">Working Memory</div>
+            <div class="block-detail">Scratchpad, todo lists, intermediate results</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="arch-connector">
+        <svg width="20" height="14" viewBox="0 0 20 14"><path d="M10 0 L10 10 L6 6 M10 10 L14 6" stroke="var(--ink)" stroke-width="1.5" fill="none"/></svg>
+      </div>
+
+      <!-- LAYER 5: Tool Layer -->
+      <div class="arch-layer">
+        <div class="arch-layer-label layer-tools">
+          <span class="layer-name">Tools</span>
+          <span class="layer-sub">Actions &amp; APIs</span>
+        </div>
+        <div class="arch-layer-content" style="background: #2a3a5a;">
+          <div class="arch-block">
+            <div class="block-title">Tool Registry</div>
+            <div class="block-detail">Schema definitions, descriptions, parameter validation</div>
+          </div>
+          <div class="arch-block">
+            <div class="block-title">Execution Sandbox</div>
+            <div class="block-detail">Isolated runtime, timeout, resource limits</div>
+          </div>
+          <div class="arch-block">
+            <div class="block-title">API Connectors</div>
+            <div class="block-detail">HTTP, database, file system, external services</div>
+          </div>
+          <div class="arch-block">
+            <div class="block-title">Result Parser</div>
+            <div class="block-detail">Normalize output, error wrapping, retry logic</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="arch-connector">
+        <svg width="20" height="14" viewBox="0 0 20 14"><path d="M10 0 L10 10 L6 6 M10 10 L14 6" stroke="var(--ink)" stroke-width="1.5" fill="none"/></svg>
+      </div>
+
+      <!-- LAYER 6: Observability -->
+      <div class="arch-layer">
+        <div class="arch-layer-label layer-observe">
+          <span class="layer-name">Observability</span>
+          <span class="layer-sub">Tracing &amp; Metrics</span>
+        </div>
+        <div class="arch-layer-content" style="background: #4a3a5a;">
+          <div class="arch-block">
+            <div class="block-title">Trace Logger</div>
+            <div class="block-detail">Step-by-step decision trace, tool call log, latency</div>
+          </div>
+          <div class="arch-block">
+            <div class="block-title">Metrics Collector</div>
+            <div class="block-detail">Token usage, cost, success rate, error distribution</div>
+          </div>
+          <div class="arch-block">
+            <div class="block-title">Eval Hooks</div>
+            <div class="block-detail">Online scoring, regression detection, drift alerts</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="arch-connector">
+        <svg width="20" height="14" viewBox="0 0 20 14"><path d="M10 0 L10 10 L6 6 M10 10 L14 6" stroke="var(--ink)" stroke-width="1.5" fill="none"/></svg>
+      </div>
+
+      <!-- LAYER 7: Persistence -->
+      <div class="arch-layer">
+        <div class="arch-layer-label layer-persist">
+          <span class="layer-name">Persistence</span>
+          <span class="layer-sub">State &amp; Durability</span>
+        </div>
+        <div class="arch-layer-content" style="background: var(--slate);">
+          <div class="arch-block">
+            <div class="block-title">Checkpointing</div>
+            <div class="block-detail">Workflow state snapshots, resume on failure</div>
+          </div>
+          <div class="arch-block">
+            <div class="block-title">Conversation Store</div>
+            <div class="block-detail">Thread history, user preferences, long-term memory</div>
+          </div>
+          <div class="arch-block">
+            <div class="block-title">Artifact Storage</div>
+            <div class="block-detail">Generated files, code, reports, images</div>
+          </div>
+          <div class="arch-block">
+            <div class="block-title">Durable Execution</div>
+            <div class="block-detail">Temporal / equivalent: survive crashes, auto-recovery</div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <div class="arch-legend">
+    <div class="arch-legend-item"><span class="arch-legend-swatch" style="background: #5a4a3a;"></span> User Layer</div>
+    <div class="arch-legend-item"><span class="arch-legend-swatch" style="background: var(--rust);"></span> Guardrails</div>
+    <div class="arch-legend-item"><span class="arch-legend-swatch" style="background: #3a2a1a;"></span> Orchestration</div>
+    <div class="arch-legend-item"><span class="arch-legend-swatch" style="background: var(--deep-green);"></span> Context</div>
+    <div class="arch-legend-item"><span class="arch-legend-swatch" style="background: #2a3a5a;"></span> Tools</div>
+    <div class="arch-legend-item"><span class="arch-legend-swatch" style="background: #4a3a5a;"></span> Observability</div>
+    <div class="arch-legend-item"><span class="arch-legend-swatch" style="background: var(--slate);"></span> Persistence</div>
+  </div>
+
+  <p class="arch-note">This architecture is framework-agnostic. LangGraph, CrewAI, Temporal, or hand-rolled — the layers remain the same. What changes is which framework handles which layer for you.</p>
+</section>
+
+<!-- SECTION: HARNESS VS AGENT — EDITORIAL OPINION -->
+<div class="section-header" id="opinion">
+  <span class="section-number">IV</span>
+  <div>
+    <div class="section-label">Section Four — Editorial</div>
+    <h2 class="section-title">Harness vs. Agent: A Necessary Distinction</h2>
+  </div>
+</div>
+
+<section class="opinion-spread">
+  <!-- LEFT: HARNESS (OPEN-ENDED) -->
+  <div class="opinion-col opinion-col-left">
+    <div class="opinion-kicker opinion-kicker-left">The Harness</div>
+    <h3 class="opinion-heading">Open-Ended <em>Runtime Infrastructure</em></h3>
+    <p class="opinion-body">A harness like Claude Code encodes <strong>no workflow logic</strong>. There's no predefined graph. The model gets a ReAct loop, a bag of tools, and the freedom to decide what to do next at every step. Read a file, run a command, search the web, edit code, spawn a subagent — all chosen dynamically by the model in the moment.</p>
+    <p class="opinion-body">The harness doesn't prescribe <strong>what</strong> the agent should do. It provides the infrastructure for the agent to do <strong>whatever it decides</strong>. It's pure runtime scaffolding: guardrails, persistence, observability, tool execution — not business logic.</p>
+
+    <ul class="opinion-trait-list">
+      <li class="opinion-trait"><span class="trait-marker">→</span> No predefined graph or DAG</li>
+      <li class="opinion-trait"><span class="trait-marker">→</span> Model is the sole decision-maker at each step</li>
+      <li class="opinion-trait"><span class="trait-marker">→</span> General-purpose tool bag, not task-specific</li>
+      <li class="opinion-trait"><span class="trait-marker">→</span> Open-ended: can solve problems it was never designed for</li>
+      <li class="opinion-trait"><span class="trait-marker">→</span> 5,000–20,000 lines of custom infrastructure</li>
+    </ul>
+
+    <div class="opinion-example">
+      <span class="ex-label">Examples</span>
+      Claude Code · Cursor · Windsurf · Devin · OpenAI Codex
+    </div>
+  </div>
+
+  <!-- RIGHT: STRUCTURED AGENT WORKFLOW -->
+  <div class="opinion-col opinion-col-right">
+    <div class="opinion-kicker opinion-kicker-right">The Structured Workflow</div>
+    <h3 class="opinion-heading">Predefined <em>Graph-Based Orchestration</em></h3>
+    <p class="opinion-body">LangGraph and CrewAI encode <strong>workflow logic in the graph structure</strong>. You draw nodes, edges, and conditions at build time. The flow is predetermined: classify → research → draft → review → publish. Powerful for known pipelines, but the topology is fixed before the model ever runs.</p>
+    <p class="opinion-body">These frameworks are excellent <strong>components inside certain layers</strong> of a harness — a structured sub-workflow that an open-ended agent delegates to. But wrapping that in broader orchestration, guardrails, and persistence is still harness work these tools don't address.</p>
+
+    <ul class="opinion-trait-list">
+      <li class="opinion-trait"><span class="trait-marker">◇</span> Predefined graph with nodes and edges</li>
+      <li class="opinion-trait"><span class="trait-marker">◇</span> Developer defines the decision topology</li>
+      <li class="opinion-trait"><span class="trait-marker">◇</span> Task-specific tools bound to specific nodes</li>
+      <li class="opinion-trait"><span class="trait-marker">◇</span> Scoped: solves the class of problems it was designed for</li>
+      <li class="opinion-trait"><span class="trait-marker">◇</span> Framework handles much of the boilerplate</li>
+    </ul>
+
+    <div class="opinion-example">
+      <span class="ex-label">Examples</span>
+      LangGraph · CrewAI · AutoGen · LlamaIndex Workflows
+    </div>
+  </div>
+</section>
+
+<div class="opinion-verdict">
+  <div class="verdict-icon">∴</div>
+  <div class="verdict-text"><strong>You don't build harnesses <em>with</em> LangGraph.</strong> You build structured agent workflows with LangGraph, and you build harnesses <em>around and beneath</em> them. The tools that map to harness-building are lower-level: Temporal for durable execution, a simple ReAct loop you write yourself, a tool registry, and a lot of custom glue. The reason production harnesses are thousands of lines is precisely because no framework handles open-ended agent infrastructure well — you're stitching it together from primitives.</div>
+</div>
+
+<!-- TECHNICAL SIDEBAR: REACT VS CODEACT -->
+<section class="loop-comparison">
+  <div class="loop-header">
+    <span class="loop-header-badge">Technical Sidebar</span>
+    <h3 class="loop-header-title">ReAct vs. CodeAct vs. The Hybrid</h3>
+  </div>
+
+  <div class="loop-cols">
+    <!-- ReAct -->
+    <div class="loop-col">
+      <div class="loop-col-label">Pattern One</div>
+      <h4 class="loop-col-name">ReAct</h4>
+      <p class="loop-col-desc">Reason → Act (tool call) → Observe. The model picks from a <strong>predefined set of typed tools</strong> at each step. Five tools means five possible actions. The harness gates every call through a permission system.</p>
+
+      <div class="loop-cycle">
+        <div class="loop-step"><span class="loop-step-num">1</span> Model reasons about next step</div>
+        <div class="loop-step"><span class="loop-step-num">2</span> Selects tool from registry</div>
+        <div class="loop-step"><span class="loop-step-num">3</span> Permission gate checks call</div>
+        <div class="loop-step"><span class="loop-step-num">4</span> Tool executes in sandbox</div>
+        <div class="loop-step"><span class="loop-step-num">5</span> Result feeds back as context</div>
+        <div class="loop-step"><span class="loop-step-num">⟳</span> Repeat until done</div>
+      </div>
+
+      <div class="loop-tradeoff">
+        <div class="loop-tradeoff-label">Tradeoff</div>
+        <div class="loop-tradeoff-good">✦ Maximum control &amp; auditability</div>
+        <div class="loop-tradeoff-bad">✧ Constrained to pre-built tool vocabulary</div>
+      </div>
+    </div>
+
+    <!-- CodeAct -->
+    <div class="loop-col">
+      <div class="loop-col-label">Pattern Two</div>
+      <h4 class="loop-col-name">CodeAct</h4>
+      <p class="loop-col-desc">The model writes <strong>arbitrary code as its action</strong>. The action space is the entire programming language — loops, conditionals, library calls, error handling, composition. No tool registry limits what's possible.</p>
+
+      <div class="loop-cycle">
+        <div class="loop-step"><span class="loop-step-num">1</span> Model reasons about next step</div>
+        <div class="loop-step"><span class="loop-step-num">2</span> Writes executable code block</div>
+        <div class="loop-step"><span class="loop-step-num">3</span> Sandbox executes code</div>
+        <div class="loop-step"><span class="loop-step-num">4</span> stdout/stderr feeds back</div>
+        <div class="loop-step"><span class="loop-step-num">5</span> Model iterates or composes</div>
+        <div class="loop-step"><span class="loop-step-num">⟳</span> Repeat until done</div>
+      </div>
+
+      <div class="loop-tradeoff">
+        <div class="loop-tradeoff-label">Tradeoff</div>
+        <div class="loop-tradeoff-good">✦ Maximum expressiveness &amp; composability</div>
+        <div class="loop-tradeoff-bad">✧ Harder to sandbox, audit, and permission-gate</div>
+      </div>
+    </div>
+
+    <!-- Hybrid -->
+    <div class="loop-col">
+      <div class="loop-col-label">In Practice</div>
+      <h4 class="loop-col-name">The Hybrid</h4>
+      <p class="loop-col-desc">Claude Code uses ReAct with typed tools — but <strong>one of those tools is bash</strong>, a CodeAct escape hatch. The model gets auditability by default and arbitrary code execution when it needs it, all through the same permission gate.</p>
+
+      <div class="loop-cycle">
+        <div class="loop-step"><span class="loop-step-num">1</span> Model reasons about next step</div>
+        <div class="loop-step"><span class="loop-step-num">2</span> Picks typed tool OR writes code</div>
+        <div class="loop-step"><span class="loop-step-num">3</span> Same permission gate for both</div>
+        <div class="loop-step"><span class="loop-step-num">4</span> Read-only tools run concurrently</div>
+        <div class="loop-step"><span class="loop-step-num">5</span> Mutating tools run sequentially</div>
+        <div class="loop-step"><span class="loop-step-num">⟳</span> Repeat until done</div>
+      </div>
+
+      <div class="loop-tradeoff">
+        <div class="loop-tradeoff-label">Tradeoff</div>
+        <div class="loop-tradeoff-good">✦ Best of both: control + expressiveness</div>
+        <div class="loop-tradeoff-bad">✧ Permission design must handle both modes</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="loop-footnote">
+    <span class="loop-footnote-marker">※</span>
+    <p class="loop-footnote-text"><strong>CodeAct is not narrower than ReAct — it's arguably more general.</strong> ReAct constrains the agent to a fixed tool vocabulary defined at build time. CodeAct gives the agent the entire language as its action space. The tradeoff isn't capability but governance: structured tool calls are easier to allowlist, audit, rate-limit, and roll back. A hybrid like Claude Code resolves this by routing most actions through typed tools and reserving code execution for when the typed tools aren't enough.</p>
+  </div>
+</section>
+
+<!-- SECTION: THE AGENT/WORKFLOW TRAP -->
+<section class="trap-section" id="trap">
+  <div class="trap-banner">
+    <div class="trap-banner-kicker">Warning — Editorial</div>
+    <h3 class="trap-banner-title">The Agent / <em>Workflow</em> Trap</h3>
+    <p class="trap-banner-sub">People don't do only one thing. A marketer writes copy, pulls reports, submits approvals, diagnoses metric drops, and reallocates budgets — all before lunch. Workflows model processes. Harnesses model <em>people</em>. Build for the workflow, and you trap yourself the moment someone does something you didn't anticipate.</p>
+  </div>
+
+  <div class="trap-risks">
+    <!-- LEFT: The risks -->
+    <div class="trap-risk-col trap-risk-col-wrong">
+      <div class="trap-col-header">
+        <span class="trap-col-icon danger">✕</span>
+        <div>
+          <div class="trap-col-label">The Trap</div>
+          <div class="trap-col-title">What Goes Wrong</div>
+        </div>
+      </div>
+
+      <div class="trap-risk-item">
+        <span class="trap-risk-marker">01</span>
+        <div>
+          <div class="trap-risk-title">Workflow masquerading as an agent</div>
+          <div class="trap-risk-desc">You build a LangGraph DAG, call it an "AI agent," and ship it. It handles the 5 use cases you designed for. But real people don't do 5 things — they do 50, in any order, often mid-task. The 6th request breaks the graph. You add a node. The 7th breaks it. By month 3, your "agent" is a brittle state machine with 40 nodes that models a process, not a person.</div>
+        </div>
+      </div>
+
+      <div class="trap-risk-item">
+        <span class="trap-risk-marker">02</span>
+        <div>
+          <div class="trap-risk-title">Agent where a workflow would suffice</div>
+          <div class="trap-risk-desc">You build an open-ended CodeAct harness for a task that's actually well-defined — say, invoice processing. The model hallucinates a step, skips validation, and costs you $40K. A simple DAG with hard-coded guardrails would have been safer, cheaper, and deterministic.</div>
+        </div>
+      </div>
+
+      <div class="trap-risk-item">
+        <span class="trap-risk-marker">03</span>
+        <div>
+          <div class="trap-risk-title">Premature orchestration lock-in</div>
+          <div class="trap-risk-desc">You encode business logic into the graph topology instead of the prompt. When the process changes — and it always changes — you're refactoring infrastructure, not updating a skill. The harness becomes the bottleneck instead of the enabler.</div>
+        </div>
+      </div>
+
+      <div class="trap-risk-item">
+        <span class="trap-risk-marker">04</span>
+        <div>
+          <div class="trap-risk-title">Approval chains hardcoded as agent steps</div>
+          <div class="trap-risk-desc">You model approval logic inside the agent instead of delegating to the system of record (Salesforce, ServiceNow, etc.). When the approval policy changes, you're rewriting agent code instead of updating a Salesforce Approval Process. Two sources of truth that inevitably diverge.</div>
+        </div>
+      </div>
+
+      <div class="trap-risk-item">
+        <span class="trap-risk-marker">05</span>
+        <div>
+          <div class="trap-risk-title">Non-durable "agents" that lose state</div>
+          <div class="trap-risk-desc">Your agent kicks off a 12-step process, crashes at step 8, and restarts from scratch — re-sending emails, re-submitting approvals, re-creating assets. Without durable execution, every long-running agent is a ticking bomb of duplicate side effects.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- RIGHT: The principles -->
+    <div class="trap-risk-col trap-risk-col-right">
+      <div class="trap-col-header">
+        <span class="trap-col-icon safe">✓</span>
+        <div>
+          <div class="trap-col-label">The Principles</div>
+          <div class="trap-col-title">How to Avoid It</div>
+        </div>
+      </div>
+
+      <div class="trap-risk-item">
+        <span class="trap-risk-marker">01</span>
+        <div>
+          <div class="trap-risk-title">Model the person, not the process</div>
+          <div class="trap-risk-desc">People are flexible. They context-switch, improvise, and handle exceptions as naturally as routine. If you're building for a <em>person</em> — a marketer, an ops lead, an analyst — build a harness. If you're automating a <em>process</em> that never varies, a workflow is fine. The test: does the user do one thing, or everything?</div>
+        </div>
+      </div>
+
+      <div class="trap-risk-item">
+        <span class="trap-risk-marker">02</span>
+        <div>
+          <div class="trap-risk-title">Let systems of record own their logic</div>
+          <div class="trap-risk-desc">Approvals live in Salesforce. Content governance lives in Aprimo. Budget rules live in the ERP. The agent <em>triggers</em> these systems and <em>reacts</em> to their signals. It never reimplements their logic. One source of truth, always.</div>
+        </div>
+      </div>
+
+      <div class="trap-risk-item">
+        <span class="trap-risk-marker">03</span>
+        <div>
+          <div class="trap-risk-title">Keep business logic in skills, not topology</div>
+          <div class="trap-risk-desc">When the process changes, you update a skill definition or a prompt — not the orchestration graph. Skills are cheap to add, modify, and delete. Graph nodes are infrastructure. Build to delete.</div>
+        </div>
+      </div>
+
+      <div class="trap-risk-item">
+        <span class="trap-risk-marker">04</span>
+        <div>
+          <div class="trap-risk-title">Make durability the default, not an add-on</div>
+          <div class="trap-risk-desc">Every external call should be a durable Temporal Activity from day one. Retrofitting durability onto a running agent is like adding seatbelts to a car while driving. The cost of durability upfront is near zero. The cost of not having it is catastrophic.</div>
+        </div>
+      </div>
+
+      <div class="trap-risk-item">
+        <span class="trap-risk-marker">05</span>
+        <div>
+          <div class="trap-risk-title">Use workflows <em>inside</em> harnesses</div>
+          <div class="trap-risk-desc">The resolution isn't either/or. An open-ended harness can delegate to structured sub-workflows when the task calls for it. The agent decides <em>which</em> workflow to invoke. The workflow handles the deterministic execution. Best of both worlds.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Spectrum: when to use what -->
+  <div class="trap-spectrum">
+    <div class="spectrum-label">The Spectrum: When to Use What</div>
+    <div class="spectrum-bar">
+      <div class="spectrum-segment" style="flex: 2; background: #3a2a1a;">Cron Job</div>
+      <div class="spectrum-segment" style="flex: 3; background: #2a3a5a;">Workflow / DAG</div>
+      <div class="spectrum-segment" style="flex: 3; background: var(--deep-green);">Structured Agent</div>
+      <div class="spectrum-segment" style="flex: 4; background: var(--rust);">Open-Ended Harness</div>
+      <div class="spectrum-segment" style="flex: 2; background: var(--ink);">Full Autonomy</div>
+    </div>
+    <div class="spectrum-labels">
+      <span>Fully Deterministic</span>
+      <span>↑ Most teams are here, calling it "AI Agents"</span>
+      <span>Fully Autonomous</span>
+    </div>
+  </div>
+</section>
+
+<!-- SECTION: CODEACT + TEMPORAL SKILLS CONVERGENCE -->
+<div class="section-header" id="convergence">
+  <span class="section-number">VI</span>
+  <div>
+    <div class="section-label">Section Six — The Convergence</div>
+    <h2 class="section-title">CodeAct + Temporal Skills: Durable by Construction</h2>
+  </div>
+</div>
+
+<section class="convergence-section">
+  <div class="convergence-hero">
+    <div class="convergence-left">
+      <div class="convergence-kicker">Buildable Today</div>
+      <h3 class="convergence-headline">What If Generated Code Was <em>Already Durable?</em></h3>
+      <p class="convergence-body">Right now, the harness wraps durability <strong>around</strong> the agent's code from the outside. Temporal sits beneath, catching failures. The agent doesn't know it's durable — the infrastructure makes it so.</p>
+      <p class="convergence-body">Flip that. Create a library of <strong>Temporal Activities and Workflow patterns as reusable skills</strong>. The agent composes them when generating code. Every building block is already durable, so the generated code is durable <strong>by construction</strong>.</p>
+      <p class="convergence-body">The agent doesn't need to understand Temporal internals. It just needs to know: <strong>when I call an API, I use <code style="color: var(--gold);">fetch_with_retry</code>. When I need approval, I use <code style="color: var(--gold);">wait_for_approval</code>. When I compose steps, I use <code style="color: var(--gold);">run_workflow</code>.</strong> Those are skills — and the model composes them like any library.</p>
+    </div>
+
+    <div class="convergence-right">
+      <div class="skill-block">
+        <span class="skill-block-label">Skill: Durable Fetch</span>
+        <span class="sk-comment"># Agent generates this naturally</span><br>
+        <span class="sk-keyword">result</span> = <span class="sk-keyword">await</span> <span class="sk-func">fetch_with_retry</span>(<br>
+        &nbsp;&nbsp;url=<span class="sk-string">"https://api.example.com/data"</span>,<br>
+        &nbsp;&nbsp;max_attempts=<span class="sk-type">3</span>,<br>
+        &nbsp;&nbsp;backoff=<span class="sk-string">"exponential"</span><br>
+        )<br>
+        <span class="sk-comment"># ↑ This is a Temporal Activity.</span><br>
+        <span class="sk-comment"># Retries, checkpoints, survives crashes.</span>
+      </div>
+
+      <div class="skill-block">
+        <span class="skill-block-label">Skill: Human Gate</span>
+        <span class="sk-comment"># Need human approval? One line.</span><br>
+        <span class="sk-keyword">approved</span> = <span class="sk-keyword">await</span> <span class="sk-func">wait_for_approval</span>(<br>
+        &nbsp;&nbsp;reviewer=<span class="sk-string">"ops-team"</span>,<br>
+        &nbsp;&nbsp;context=result.summary,<br>
+        &nbsp;&nbsp;timeout=<span class="sk-string">"24h"</span><br>
+        )<br>
+        <span class="sk-comment"># ↑ Temporal Signal. Process sleeps,</span><br>
+        <span class="sk-comment"># wakes on approval. State persists.</span>
+      </div>
+
+      <div class="skill-block">
+        <span class="skill-block-label">Skill: Compose Pipeline</span>
+        <span class="sk-comment"># Multi-step pipeline, fully durable</span><br>
+        <span class="sk-keyword">async with</span> <span class="sk-func">run_workflow</span>(<span class="sk-string">"etl_pipeline"</span>) <span class="sk-keyword">as</span> wf:<br>
+        &nbsp;&nbsp;raw &nbsp;= <span class="sk-keyword">await</span> wf.<span class="sk-func">step</span>(<span class="sk-func">extract</span>, source)<br>
+        &nbsp;&nbsp;clean = <span class="sk-keyword">await</span> wf.<span class="sk-func">step</span>(<span class="sk-func">transform</span>, raw)<br>
+        &nbsp;&nbsp;<span class="sk-keyword">await</span> wf.<span class="sk-func">step</span>(<span class="sk-func">load</span>, clean, dest)<br>
+        <span class="sk-comment"># ↑ Each step checkpointed. Crash at</span><br>
+        <span class="sk-comment"># step 2? Resumes from step 2.</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Collapse diagram: 7 layers → evolved -->
+  <div class="convergence-collapse">
+    <h4 class="collapse-title">How the Layers Evolve</h4>
+    <p class="collapse-subtitle">Seven layers remain — but three shift their weight into the generated code</p>
+
+    <div class="collapse-grid">
+      <!-- BEFORE -->
+      <div class="collapse-col">
+        <div class="collapse-col-header">Traditional Harness</div>
+        <div class="collapse-layer unchanged" style="background: #5a4a3a;">User Layer</div>
+        <div class="collapse-layer unchanged" style="background: var(--rust);">Guardrails</div>
+        <div class="collapse-layer unchanged" style="background: #3a2a1a;">Orchestration</div>
+        <div class="collapse-layer unchanged" style="background: var(--deep-green);">Context</div>
+        <div class="collapse-layer unchanged" style="background: #2a3a5a;">Tools</div>
+        <div class="collapse-layer unchanged" style="background: #4a3a5a;">Observability</div>
+        <div class="collapse-layer unchanged" style="background: var(--slate);">Persistence</div>
+      </div>
+
+      <!-- CENTER ARROW -->
+      <div class="collapse-center">
+        <svg width="24" height="24" viewBox="0 0 24 24"><path d="M5 12 L19 12 M13 6 L19 12 L13 18" stroke="var(--cream)" stroke-width="2" fill="none"/></svg>
+      </div>
+
+      <!-- AFTER -->
+      <div class="collapse-col">
+        <div class="collapse-col-header">With Temporal Skills</div>
+        <div class="collapse-layer unchanged" style="background: #5a4a3a;">User Layer</div>
+        <div class="collapse-layer unchanged" style="background: var(--rust);">Guardrails</div>
+        <div class="collapse-layer evolved" style="background: #3a2a1a;">
+          Orchestration
+          <span class="layer-annotation">→ moves into generated code</span>
+        </div>
+        <div class="collapse-layer unchanged" style="background: var(--deep-green);">Context</div>
+        <div class="collapse-layer evolved" style="background: #2a3a5a;">
+          Tools
+          <span class="layer-annotation">→ skills become the tools</span>
+        </div>
+        <div class="collapse-layer unchanged" style="background: #4a3a5a;">Observability</div>
+        <div class="collapse-layer absorbed" style="background: var(--slate);">
+          Persistence
+        </div>
+      </div>
+    </div>
+
+    <div style="text-align: center; margin-top: 1.5rem;">
+      <span style="font-family: 'JetBrains Mono', monospace; font-size: 0.5rem; letter-spacing: 0.2em; text-transform: uppercase; color: rgba(245,240,232,0.25);">
+        <span style="color: var(--gold);">■</span> Evolved &nbsp;&nbsp;
+        <span style="text-decoration: line-through; opacity: 0.5;">■</span> Absorbed into skills
+      </span>
+    </div>
+  </div>
+
+  <div class="convergence-footnote">
+    <span class="convergence-footnote-marker">⟡</span>
+    <p class="convergence-footnote-text"><strong>This is buildable today with Temporal skills.</strong> You define a set of durable primitives as Temporal Activities — API calls with retry, human gates with signals, pipelines with checkpointed steps. The agent learns to compose them the same way it composes any library. The harness gets thinner because the generated code carries its own durability, retry logic, and state management. The seven layers don't disappear, but the persistence layer folds into the skills, orchestration shifts into generated code, and the harness shrinks to what it should be: guardrails, context, and observability.</p>
+  </div>
+</section>
+
+<!-- SECTION: MARKETING HARNESS -->
+<div class="section-header" id="marketing">
+  <span class="section-number">VII</span>
+  <div>
+    <div class="section-label">Section Seven — Applied</div>
+    <h2 class="section-title">Beyond Code: A Marketing Harness</h2>
+  </div>
+</div>
+
+<section class="mktg-section">
+  <div class="mktg-hero">
+    <div class="mktg-hero-left">
+      <div class="mktg-kicker">CodeAct, Not a Pipeline</div>
+      <h3 class="mktg-headline">An Open-Ended Harness for <em>Marketing</em></h3>
+      <p class="mktg-body" style="margin-bottom: 1rem;">A marketing harness is <strong>not a campaign pipeline</strong>. That's LangGraph thinking — predefined steps, fixed topology. A real harness is open-ended: the marketer asks <em>anything</em>, and the agent composes whatever Temporal-backed Aprimo and Salesforce skills it needs on the fly.</p>
+      <p class="mktg-body" style="margin-bottom: 1rem;"><strong>Think Claude Code, but for marketing.</strong> The agent gets a bag of durable skills — <code style="color: var(--gold);">search_dam</code>, <code style="color: var(--gold);">submit_for_review</code>, <code style="color: var(--gold);">create_campaign</code>, <code style="color: var(--gold);">pull_metrics</code>, <code style="color: var(--gold);">update_lead_scores</code> — and writes CodeAct that composes them dynamically based on what the marketer needs right now.</p>
+      <p class="mktg-body">No predefined workflow. No fixed graph. The model reasons, picks skills, writes durable code, and executes. <strong>The marketer's intent is the only input. The agent figures out the rest.</strong></p>
+    </div>
+
+    <div class="mktg-hero-right">
+      <div style="font-family: 'JetBrains Mono', monospace; font-size: 0.55rem; letter-spacing: 0.3em; text-transform: uppercase; color: var(--muted); margin-bottom: 1rem;">The Skill Bag — Not a Pipeline</div>
+
+      <div class="mktg-workflow">
+        <div class="mktg-wf-step">
+          <div class="wf-step-label">Aprimo Skills</div>
+          <div class="wf-step-title">Content &amp; Asset Operations</div>
+          <div class="wf-step-detail">Any content task — search, create, review, publish, expire — composed as needed</div>
+          <div class="wf-step-tools">
+            <span class="wf-tool-tag aprimo">search_dam</span>
+            <span class="wf-tool-tag aprimo">create_brief</span>
+            <span class="wf-tool-tag aprimo">submit_for_review</span>
+            <span class="wf-tool-tag aprimo">publish_asset</span>
+            <span class="wf-tool-tag aprimo">check_brand_compliance</span>
+            <span class="wf-tool-tag aprimo">get_workflow_status</span>
+          </div>
+        </div>
+
+        <div class="mktg-wf-step">
+          <div class="wf-step-label">Salesforce Skills</div>
+          <div class="wf-step-title">CRM &amp; Campaign Operations</div>
+          <div class="wf-step-detail">Any CRM task — query, update, score, attribute, report — composed as needed</div>
+          <div class="wf-step-tools">
+            <span class="wf-tool-tag salesforce">query_leads</span>
+            <span class="wf-tool-tag salesforce">create_campaign</span>
+            <span class="wf-tool-tag salesforce">update_lead_scores</span>
+            <span class="wf-tool-tag salesforce">pull_metrics</span>
+            <span class="wf-tool-tag salesforce">attribute_pipeline</span>
+            <span class="wf-tool-tag salesforce">soql_query</span>
+          </div>
+        </div>
+
+        <div class="mktg-wf-step">
+          <div class="wf-step-label">Temporal Skills</div>
+          <div class="wf-step-title">Durability &amp; Human Gates</div>
+          <div class="wf-step-detail">Durable primitives the agent weaves into any generated code</div>
+          <div class="wf-step-tools">
+            <span class="wf-tool-tag temporal">fetch_with_retry</span>
+            <span class="wf-tool-tag temporal">wait_for_approval</span>
+            <span class="wf-tool-tag temporal">run_workflow</span>
+            <span class="wf-tool-tag temporal">schedule_task</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Show diverse, unpredictable requests — not a single pipeline -->
+  <div class="pullquote-banner" style="background: linear-gradient(160deg, #1a1428, #2a1a3a); border-bottom: none;">
+    <p style="font-family: 'JetBrains Mono', monospace; font-size: 0.55rem; letter-spacing: 0.35em; text-transform: uppercase; color: rgba(245,240,232,0.3); margin-bottom: 1.5rem;">The marketer asks anything. The agent composes skills on the fly.</p>
+    <p class="pullquote-text" style="font-size: clamp(1.1rem, 2vw, 1.5rem); font-style: normal; text-align: left; max-width: 850px;">
+      <span style="color: var(--gold);">"Which campaigns are underperforming this quarter?"</span><br>
+      <span style="color: var(--gold);">"Create a follow-up email for everyone who opened but didn't click."</span><br>
+      <span style="color: var(--gold);">"Find approved enterprise assets and draft three social variants."</span><br>
+      <span style="color: var(--gold);">"Why did our MQL-to-SQL conversion drop last week?"</span><br>
+      <span style="color: var(--gold);">"Submit this for legal review and Slack me when it's approved."</span><br>
+      <span style="color: var(--gold);">"Reallocate budget from the paid campaign to the webinar series."</span>
+    </p>
+    <div class="pullquote-attr">— Six requests. Six different skill compositions. Zero predefined workflows.</div>
+  </div>
+
+  <!-- CodeAct examples: show the agent generating DIFFERENT code for DIFFERENT requests -->
+  <div class="mktg-skills-grid">
+    <div class="mktg-skill-panel">
+      <div class="mktg-skill-header">
+        <span class="mktg-skill-badge aprimo-bg">Request</span>
+        <span class="mktg-skill-name">"Find assets and draft social posts"</span>
+      </div>
+      <p class="mktg-skill-desc">The agent reasons about the request, then writes CodeAct that composes Aprimo skills — no predefined template told it to do this in this order.</p>
+      <div class="skill-block" style="margin-bottom: 0;">
+        <span class="skill-block-label">Agent-Generated CodeAct</span>
+        <span class="sk-comment"># Agent decides: search → filter → generate</span><br>
+        <span class="sk-keyword">assets</span> = <span class="sk-keyword">await</span> <span class="sk-func">search_dam</span>(<br>
+        &nbsp;&nbsp;tags=[<span class="sk-string">"enterprise"</span>, <span class="sk-string">"product-shot"</span>],<br>
+        &nbsp;&nbsp;status=<span class="sk-string">"approved"</span>,<br>
+        &nbsp;&nbsp;min_resolution=<span class="sk-string">"1080x1080"</span><br>
+        )<br><br>
+        <span class="sk-comment"># Agent decides to check brand compliance</span><br>
+        <span class="sk-keyword">for</span> asset <span class="sk-keyword">in</span> assets:<br>
+        &nbsp;&nbsp;<span class="sk-keyword">await</span> <span class="sk-func">check_brand_compliance</span>(asset)<br><br>
+        <span class="sk-comment"># Agent decides: 3 variants, different CTAs</span><br>
+        <span class="sk-keyword">variants</span> = []<br>
+        <span class="sk-keyword">for</span> tone <span class="sk-keyword">in</span> [<span class="sk-string">"urgent"</span>, <span class="sk-string">"curious"</span>, <span class="sk-string">"social-proof"</span>]:<br>
+        &nbsp;&nbsp;v = <span class="sk-keyword">await</span> <span class="sk-func">generate_content</span>(<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;type=<span class="sk-string">"social"</span>, tone=tone,<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;assets=assets[:2],<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;brand_kit=<span class="sk-string">"enterprise-voice"</span><br>
+        &nbsp;&nbsp;)<br>
+        &nbsp;&nbsp;variants.append(v)<br>
+        <span class="sk-comment"># ↑ Every call is a durable Temporal Activity</span>
+      </div>
+    </div>
+
+    <div class="mktg-skill-panel">
+      <div class="mktg-skill-header">
+        <span class="mktg-skill-badge salesforce-bg">Request</span>
+        <span class="mktg-skill-name">"Why did MQL conversion drop?"</span>
+      </div>
+      <p class="mktg-skill-desc">Completely different request, completely different code. The agent reasons about diagnosis, then composes Salesforce skills it was never explicitly told to chain together.</p>
+      <div class="skill-block" style="margin-bottom: 0;">
+        <span class="skill-block-label">Agent-Generated CodeAct</span>
+        <span class="sk-comment"># Agent decides: pull data → compare → diagnose</span><br>
+        <span class="sk-keyword">this_week</span> = <span class="sk-keyword">await</span> <span class="sk-func">soql_query</span>(<span class="sk-string">"""<br>
+        &nbsp;&nbsp;SELECT LeadSource, COUNT(Id), <br>
+        &nbsp;&nbsp;AVG(Lead_Score__c) FROM Lead<br>
+        &nbsp;&nbsp;WHERE CreatedDate = THIS_WEEK<br>
+        &nbsp;&nbsp;GROUP BY LeadSource"""</span>)<br><br>
+        <span class="sk-keyword">last_week</span> = <span class="sk-keyword">await</span> <span class="sk-func">soql_query</span>(<span class="sk-string">"""<br>
+        &nbsp;&nbsp;...WHERE CreatedDate = LAST_WEEK...<br>
+        &nbsp;&nbsp;"""</span>)<br><br>
+        <span class="sk-comment"># Agent decides to check campaign changes</span><br>
+        <span class="sk-keyword">campaigns</span> = <span class="sk-keyword">await</span> <span class="sk-func">pull_metrics</span>(<br>
+        &nbsp;&nbsp;date_range=<span class="sk-string">"last_14d"</span>,<br>
+        &nbsp;&nbsp;group_by=<span class="sk-string">"source"</span><br>
+        )<br><br>
+        <span class="sk-comment"># Agent composes analysis — pure code</span><br>
+        <span class="sk-keyword">drop_sources</span> = [s <span class="sk-keyword">for</span> s <span class="sk-keyword">in</span> this_week<br>
+        &nbsp;&nbsp;<span class="sk-keyword">if</span> s.conversion &lt; last_week[s.name] * <span class="sk-type">0.8</span>]
+      </div>
+    </div>
+  </div>
+
+  <!-- Approval Orchestration: Temporal + Salesforce Approval Chains -->
+  <div class="approval-panel">
+    <div class="approval-narrative">
+      <div class="approval-kicker">Temporal + Salesforce Native Automation</div>
+      <h4 class="approval-headline">Don't Rebuild What <em>Salesforce Already Does</em></h4>
+      <p class="approval-body">Salesforce already has <strong>Approval Processes, Flow Builder, Assignment Rules, Escalation Rules, Lead Routing, and Platform Events</strong>. Teams have spent years configuring them. The agent doesn't replace any of it. <strong>It triggers these systems and reacts to their outcomes.</strong></p>
+      <p class="approval-body">The agent submits an Approval Process request and the Temporal Workflow enters a durable sleep — <strong>costing zero compute</strong>. When the approver clicks "Approve," a Platform Event fires. Temporal catches the signal, wakes the workflow, and <strong>the agent resumes instantly</strong>. Same for Flows: a lead assignment Flow runs inside Salesforce, the agent listens for the result and immediately starts the next action.</p>
+      <p class="approval-body">This means the <strong>business logic stays where the business team configured it</strong>. When a VP changes the approval threshold from $50K to $75K, or the ops team updates lead routing rules in Flow Builder — the agent adapts automatically because it never owned that logic. One source of truth, always.</p>
+      <p class="approval-body" style="color: rgba(245,240,232,0.5);  font-size: 0.82rem;">No polling. No cron jobs. No reimplemented business rules. The agent sleeps until Salesforce tells it what happened.</p>
+    </div>
+
+    <div class="approval-code-area">
+      <!-- Visual: Approval chain status -->
+      <div style="font-family: 'JetBrains Mono', monospace; font-size: 0.5rem; letter-spacing: 0.3em; text-transform: uppercase; color: rgba(245,240,232,0.3); margin-bottom: 1rem;">Salesforce Native Automation → Temporal Signals</div>
+
+      <div class="approval-chain">
+        <div class="approval-chain-step">
+          <span class="chain-dot approved"></span>
+          <div>
+            <div class="chain-label">SF Approval Process</div>
+            <div class="chain-sublabel">Multi-level chain — configured in Salesforce Setup</div>
+          </div>
+          <span class="chain-status s-approved">Signal</span>
+        </div>
+        <div class="approval-chain-step">
+          <span class="chain-dot approved"></span>
+          <div>
+            <div class="chain-label">SF Flow Builder</div>
+            <div class="chain-sublabel">Lead routing, field updates, record-triggered automations</div>
+          </div>
+          <span class="chain-status s-approved">Signal</span>
+        </div>
+        <div class="approval-chain-step">
+          <span class="chain-dot approved"></span>
+          <div>
+            <div class="chain-label">SF Assignment Rules</div>
+            <div class="chain-sublabel">Lead/case assignment — owned by ops team</div>
+          </div>
+          <span class="chain-status s-approved">Signal</span>
+        </div>
+        <div class="approval-chain-step">
+          <span class="chain-dot waiting"></span>
+          <div>
+            <div class="chain-label">SF Platform Events</div>
+            <div class="chain-sublabel">Any automation outcome fires an event</div>
+          </div>
+          <span class="chain-status s-waiting">Listening</span>
+        </div>
+        <div class="approval-chain-step">
+          <span class="chain-dot executing"></span>
+          <div>
+            <div class="chain-label">Temporal Workflow Wakes</div>
+            <div class="chain-sublabel">Agent resumes with full context — zero delay</div>
+          </div>
+          <span class="chain-status s-executing">Executing</span>
+        </div>
+      </div>
+
+      <!-- CodeAct for approval orchestration -->
+      <div class="skill-block" style="margin-bottom: 0.8rem; border-color: var(--gold);">
+        <span class="skill-block-label">Approvals — Agent Sleeps, SF Decides</span>
+        <span class="sk-comment"># Trigger SF's existing approval process</span><br>
+        <span class="sk-keyword">approval</span> = <span class="sk-keyword">await</span> <span class="sk-func">submit_sf_approval</span>(<br>
+        &nbsp;&nbsp;record_id=campaign.id,<br>
+        &nbsp;&nbsp;process=<span class="sk-string">"Campaign_Launch_Approval"</span><br>
+        )<br><br>
+        <span class="sk-comment"># Durable sleep. Wakes on SF Platform Event.</span><br>
+        <span class="sk-keyword">await</span> <span class="sk-func">wait_for_sf_event</span>(<br>
+        &nbsp;&nbsp;event=<span class="sk-string">"ApprovalComplete__e"</span>,<br>
+        &nbsp;&nbsp;filter={<span class="sk-string">"record_id"</span>: campaign.id}<br>
+        )<br>
+        <span class="sk-comment"># ↑ Agent resumes instantly. Go live.</span><br>
+        <span class="sk-keyword">await</span> <span class="sk-func">publish_asset</span>(assets, target=<span class="sk-string">"production"</span>)
+      </div>
+
+      <div class="skill-block" style="margin-bottom: 0; border-color: var(--deep-green);">
+        <span class="skill-block-label">Flows — Agent Triggers, SF Routes</span>
+        <span class="sk-comment"># Create lead — SF Flow handles routing</span><br>
+        <span class="sk-keyword">lead</span> = <span class="sk-keyword">await</span> <span class="sk-func">create_sf_record</span>(<br>
+        &nbsp;&nbsp;type=<span class="sk-string">"Lead"</span>,<br>
+        &nbsp;&nbsp;data={<span class="sk-string">"Company"</span>: <span class="sk-string">"Acme"</span>, ...}<br>
+        )<br>
+        <span class="sk-comment"># SF Flow fires: assigns owner, sets</span><br>
+        <span class="sk-comment"># score, triggers nurture sequence</span><br><br>
+        <span class="sk-comment"># Agent waits for Flow to finish</span><br>
+        <span class="sk-keyword">result</span> = <span class="sk-keyword">await</span> <span class="sk-func">wait_for_sf_event</span>(<br>
+        &nbsp;&nbsp;event=<span class="sk-string">"LeadRouted__e"</span>,<br>
+        &nbsp;&nbsp;filter={<span class="sk-string">"lead_id"</span>: lead.id}<br>
+        )<br>
+        <span class="sk-comment"># ↑ Now the agent knows WHO owns it</span><br>
+        <span class="sk-comment"># and acts accordingly — no hardcoded rules</span><br>
+        <span class="sk-keyword">await</span> <span class="sk-func">notify_owner</span>(result.owner, lead)
+      </div>
+    </div>
+  </div>
+
+  <div class="convergence-footnote">
+    <span class="convergence-footnote-marker">⟡</span>
+    <p class="convergence-footnote-text"><strong>This is not a pipeline. It's Claude Code for marketing.</strong> The agent has a bag of durable Temporal skills backed by Aprimo and Salesforce APIs. The marketer asks anything — the agent reasons, writes CodeAct, and every call is a durable Temporal Activity. Approvals, lead routing, field updates, escalations — all run inside Salesforce where the ops team configured them. The agent triggers and reacts. <strong>Approval chains live in Salesforce. Flows and assignment rules live in Salesforce. Content governance lives in Aprimo. Durable execution lives in Temporal. Reasoning lives in the model.</strong> Each system does exactly what it's best at. Nothing is reimplemented.</p>
+  </div>
+</section>
+
+<!-- COLOPHON -->
+<footer class="colophon">
+  <div class="colophon-title">HARNESS</div>
+  <div>Curated April 2026</div>
+  <div>A Reading List for Builders</div>
+</footer>
+
+<!-- GD FOOTER -->
+<footer class="gd-footer">
+  <div class="gd-footer-links">
+    <a href="https://www.griddynamics.com/privacy">Privacy Policy</a>
+    <span class="link-sep">|</span>
+    <a href="https://www.griddynamics.com/grid-dynamics-california-resident-privacy-notice">CCPA</a>
+    <span class="link-sep">|</span>
+    <a href="https://www.griddynamics.com/terms-and-conditions">Terms of Use</a>
+    <span class="link-sep">|</span>
+    <a href="https://cdnwp.griddynamics.com/wp-content/uploads/2024/03/RetrieveMou.pdf" target="_blank" rel="noopener">E-Verify</a>
+    <span class="link-sep">|</span>
+    <a href="https://www.griddynamics.com/responsible-disclosure-policy">Responsible Disclosure Policy</a>
+    <span class="link-sep">|</span>
+    <a href="https://www.griddynamics.com/accessibility-statement">Accessibility Statement</a>
+    <span class="link-sep">|</span>
+    <a href="https://www.griddynamics.com/grid-dynamics-california-resident-privacy-notice#do-not-sell">Do Not Sell or Share My Personal Information</a>
+  </div>
+  <p class="gd-footer-copyright">Copyright &copy; 2026 Grid Dynamics Holdings, Inc. All rights reserved.</p>
+  <p class="gd-footer-disclosure">Grid Dynamics Holdings, Inc. is publicly traded on Nasdaq (GDYN) with headquarters in San Ramon, California. Beijing Teamsun Technology Co., Ltd., a Chinese company, is a minority shareholder owning approximately 20.0% of Grid Dynamics shares through a subsidiary. Ownership percentages fluctuate and are updated in SEC filings available at <a href="https://www.griddynamics.com/investors" style="color: rgba(255,255,255,0.5); text-decoration: underline;">griddynamics.com/investors</a> and <a href="https://www.sec.gov" target="_blank" rel="noopener" style="color: rgba(255,255,255,0.5); text-decoration: underline;">www.sec.gov</a>. Grid Dynamics anticipates Beijing Teamsun's ownership will not exceed approximately 20.0%.</p>
+</footer>
+
+</body>
+</html>
